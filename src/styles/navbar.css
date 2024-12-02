@@ -1,0 +1,50 @@
+/* navbar.css */
+.navbar {
+  background-color: #1f2937; /* Dark background */
+  padding: 16px 24px; /* Padding around navbar */
+  display: flex;
+  justify-content: space-between; /* Space between logo and user menu */
+  align-items: center;
+}
+
+.navbar-logo {
+  color: #3b82f6; /* Blue accent for logo */
+  font-size: 1.5rem; /* Larger font size for visibility */
+  font-weight: bold;
+}
+
+.navbar-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #3b82f6; /* Blue border */
+  transition: border-color 0.3s ease;
+}
+
+.navbar-avatar:hover {
+  border-color: #60a5fa; /* Lighter blue on hover */
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 56px; /* Position below avatar */
+  right: 0;
+  background-color: #ffffff; /* White background */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Softer shadow */
+  z-index: 10;
+  width: 160px; /* Optional: set width for consistency */
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #eff6ff; /* Light blue on hover */
+  color: #1f2937;
+}

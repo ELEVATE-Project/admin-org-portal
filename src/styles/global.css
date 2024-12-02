@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Additional global styles can be added here */
+
+body {
+  @apply font-sans bg-gray-100; /* Tailwind utility for light gray background */
+}
