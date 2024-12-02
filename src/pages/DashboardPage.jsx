@@ -186,6 +186,7 @@ const DashboardPage = () => {
   };
   const actAsOrgAdmin = async (org) => {
     localStorage.setItem("custom_org", org.id);
+    localStorage.setItem("custom_org_name", org.name || "Default");
 
     toast({
       description: "Acting as Org Admin for: " + org.name,

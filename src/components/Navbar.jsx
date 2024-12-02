@@ -16,6 +16,7 @@ const Navbar = ({ onMenuClick, onSidebarToggle }) => {
   const [searchFocused, setSearchFocused] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [orgId, setOrgId] = useState(null); // New state to store organization ID
+  const [storedOrgName, setOrgName] = useState(null); // New state to store organization ID
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
   const notificationsRef = useRef(null);
@@ -44,10 +45,15 @@ const Navbar = ({ onMenuClick, onSidebarToggle }) => {
     const storedOrgId = localStorage.getItem("custom_org");
     setOrgId(storedOrgId); // Update the state with the stored org ID
   }, []);
+  useEffect(() => {
+    const storedOrgName = localStorage.getItem("custom_org_name");
+    setOrgName(storedOrgName); // Update the state with the stored org ID
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("user");
+    localStorage.removeItem("custom_org");
     navigate("/login");
   };
 
@@ -111,7 +117,7 @@ const Navbar = ({ onMenuClick, onSidebarToggle }) => {
       {/* Right section */}
       <div className="flex items-center gap-2">
         {/* Dark Mode Toggle */}
-{/*         <button
+        {/*         <button
           onClick={() => setDarkMode(!darkMode)}
           className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           aria-label="Toggle dark mode"
@@ -125,7 +131,7 @@ const Navbar = ({ onMenuClick, onSidebarToggle }) => {
 
         {/* Organization Info */}
         <div className="flex items-center space-x-2 text-sm">
-          <OrganizationInfo orgId={orgId} />
+          <OrganizationInfo orgId={orgId} storedOrgName={storedOrgName} />
         </div>
 
         {/* Notifications */}

@@ -1,7 +1,7 @@
 import React from "react";
 import { Info } from "lucide-react";
 
-const OrganizationInfo = ({ orgId }) => {
+const OrganizationInfo = ({ orgId, storedOrgName }) => {
   if (!orgId) {
     return null; // Or you could return a default placeholder
   }
@@ -12,7 +12,9 @@ const OrganizationInfo = ({ orgId }) => {
         className="text-gray-500 dark:text-gray-400 w-4 h-4"
         strokeWidth={2}
       />
-      <span className="text-gray-600 dark:text-gray-400">Org ID: {orgId}</span>
+      <span className="text-gray-600 dark:text-gray-400">
+        Acting Org Admin for: {storedOrgName}
+      </span>
     </div>
   );
 };
