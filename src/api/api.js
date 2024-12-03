@@ -8,8 +8,20 @@ import { USER_API } from "./endpoints";
  */
 export const login = async (formData) => {
   const response = await axiosInstance.post(USER_API.login, formData);
-  const { access_token, user } = response.data.result;
+  const { access_token, user, refresh_token } = response.data.result;
   return { access_token, user };
+};
+/**
+ * User login
+ * @param {Object} formData - User login details (email, password)
+ * @returns {Promise} API response
+ */
+export const logout = async (accessToken, refreshToken) => {
+  const response = await axiosInstance.post(USER_API.logout, {
+    "X-auth-token": accessToken,
+    refresh_token: refreshToken,
+  });
+  return response.data.result;
 };
 
 /**

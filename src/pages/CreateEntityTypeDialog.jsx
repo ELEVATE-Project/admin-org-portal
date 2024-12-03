@@ -42,20 +42,13 @@ const CreateEntityTypeDialog = ({ onCreate }) => {
     allow_custom_entities: true,
     model_names: ["UserExtension", "Session"],
     required: true,
-    regex: "",
   });
 
   // Data type options
   const dataTypeOptions = ["STRING", "NUMBER", "BOOLEAN", "DATE"];
 
   // Model name options (can be expanded)
-  const modelNameOptions = [
-    "UserExtension",
-    "Session",
-    "Product",
-    "Order",
-    // Add more model names as needed
-  ];
+  const modelNameOptions = ["UserExtension", "Session"];
 
   const handleInputChange = (field, value) => {
     setNewEntityType((prev) => ({
@@ -86,12 +79,33 @@ const CreateEntityTypeDialog = ({ onCreate }) => {
   const handleCreate = () => {
     if (validateForm()) {
       onCreate(newEntityType);
+      resetForm(); // Reset the form
       setOpenState(false);
     }
   };
+  const resetForm = () => {
+    setNewEntityType({
+      value: "",
+      label: "",
+      status: "ACTIVE",
+      data_type: "STRING",
+      allow_filtering: true,
+      has_entities: true,
+      allow_custom_entities: true,
+      model_names: ["UserExtension", "Session"],
+      required: true,
+    });
+    setValidationErrors({});
+  };
 
   return (
-    <Dialog open={openState} onOpenChange={setOpenState}>
+    <Dialog
+      open={openState}
+      onOpenChange={(isOpen) => {
+        setOpenState(isOpen);
+        if (!isOpen) resetForm();
+      }}
+    >
       <DialogTrigger asChild>
         <Button variant="outline" className="bg-blue-50 hover:bg-blue-100">
           Create Entity Type
@@ -228,7 +242,8 @@ const CreateEntityTypeDialog = ({ onCreate }) => {
               onChange={(selected) =>
                 handleInputChange("model_names", selected)
               }
-              className="col-span-3"
+              className="col-span-3 max-h-56 overflow-y-auto relative z-50"
+              selectedItemsContainerClassName="flex flex-wrap gap-2"
             />
           </div>
 
@@ -333,11 +348,15 @@ const CreateEntityTypeDialog = ({ onCreate }) => {
         <DialogFooter>
           <Button
             variant="outline"
-            onClick={() => setOpenState(false)}
+            onClick={() => {
+              setOpenState(false);
+              resetForm();
+            }}
             className="mr-2"
           >
             Cancel
           </Button>
+
           <Button
             onClick={handleCreate}
             className="bg-blue-600 hover:bg-blue-700 text-white"

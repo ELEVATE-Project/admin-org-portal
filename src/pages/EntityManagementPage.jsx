@@ -80,7 +80,7 @@ const EntityManagementPage = () => {
       console.error("Failed to create entity type", error);
       toast({
         title: "Error",
-        description: "Failed to delete user.",
+        description: "Failed to create entity type.",
         variant: "destructive",
       });
     }
@@ -92,7 +92,9 @@ const EntityManagementPage = () => {
       const entityToCreate = {
         ...newEntity,
         entity_type_id: selectedEntityType.id,
+        type: "SYSTEM",
       };
+
       const response = await createEntity(entityToCreate);
       setEntities([...entities, response.result]);
       setNewEntity({ value: "", label: "" });

@@ -10,12 +10,17 @@ import {
   LayoutList,
   FileText,
 } from "lucide-react";
+import { logout } from "../api/api";
 
 const Sidebar = ({ isCollapsed = false }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await logout(
+      localStorage.getItem("access_token"),
+      localStorage.getItem("refresh_token")
+    );
     localStorage.clear();
     navigate("/login");
   };

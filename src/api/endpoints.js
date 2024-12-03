@@ -2,6 +2,7 @@
 
 export const USER_API = {
   login: "/user/v1/admin/login",
+  logout: "/user/v1/account/logout",
   createUser: "/user/v1/admin/create",
   deleteUser: (userId) => `/user/v1/admin/deleteUser/${userId}`,
   addOrgAdmin: "/user/v1/admin/addOrgAdmin",

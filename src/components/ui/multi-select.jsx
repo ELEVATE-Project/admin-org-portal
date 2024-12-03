@@ -16,11 +16,15 @@ export function MultiSelect({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="w-full justify-start">
+        <Button
+          variant="outline"
+          className="w-full justify-start text-left flex-wrap max-h-[48px] overflow-hidden text-ellipsis"
+          title={value.join(", ")} // Adds a tooltip for visibility of all selections
+        >
           {value.length === 0 ? placeholder : value.join(", ")}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-2">
+      <PopoverContent className="w-full p-2 max-h-56 overflow-y-auto">
         {options.map((option) => (
           <div key={option} className="flex items-center space-x-2 p-1">
             <Checkbox

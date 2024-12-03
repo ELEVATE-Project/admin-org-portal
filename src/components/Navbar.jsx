@@ -10,6 +10,8 @@ import {
   Sun,
 } from "lucide-react";
 import { OrganizationInfo } from "@/components/ui/actingOrg";
+import { logout } from "../api/api";
+
 const Navbar = ({ onMenuClick, onSidebarToggle }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -50,10 +52,13 @@ const Navbar = ({ onMenuClick, onSidebarToggle }) => {
     setOrgName(storedOrgName); // Update the state with the stored org ID
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("user");
-    localStorage.removeItem("custom_org");
+  const handleLogout = async () => {
+    await logout(
+      localStorage.getItem("access_token"),
+      localStorage.getItem("refresh_token")
+    );
+    localStorage.clear();
+
     navigate("/login");
   };
 

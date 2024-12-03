@@ -71,8 +71,9 @@ const AuthForms = () => {
 
     setIsLoading(true);
     try {
-      const { access_token, user } = await login(formData);
+      const { access_token, user, refresh_token } = await login(formData);
       localStorage.setItem("access_token", access_token);
+      localStorage.setItem("refresh_token", refresh_token);
 
       const profileDetails = await getProfile(); // Use the getProfile function
 
