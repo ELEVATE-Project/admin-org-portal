@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,27 +9,49 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
-  const [newEntityType, setNewEntityType] = useState({
+export const EditEntityDialog = ({
+  open,
+  onOpenChange,
+  onEdit,
+  entityType,
+  initialEntity,
+}) => {
+  const [entity, setEntity] = useState({
     value: "",
     label: "",
-    description: "",
+    status: "ACTIVE",
   });
 
+  // Populate form with initial entity data
+  useEffect(() => {
+    if (initialEntity) {
+      setEntity({
+        value: initialEntity.value,
+        label: initialEntity.label,
+        status: initialEntity.status,
+      });
+    }
+  }, [initialEntity]);
+
   const handleSubmit = () => {
-    onCreate(newEntityType);
-    setNewEntityType({ value: "", label: "", description: "" });
+    onEdit(entity);
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create New Entity Type</DialogTitle>
+          <DialogTitle>Edit Entity for {entityType.label}</DialogTitle>
           <DialogDescription>
-            Define a new entity type for your system
+            Modify details of the existing entity
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -39,9 +61,9 @@ export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
             </Label>
             <Input
               id="value"
-              value={newEntityType.value}
+              value={entity.value}
               onChange={(e) =>
-                setNewEntityType((prev) => ({
+                setEntity((prev) => ({
                   ...prev,
                   value: e.target.value,
                 }))
@@ -56,9 +78,9 @@ export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
             </Label>
             <Input
               id="label"
-              value={newEntityType.label}
+              value={entity.label}
               onChange={(e) =>
-                setNewEntityType((prev) => ({
+                setEntity((prev) => ({
                   ...prev,
                   label: e.target.value,
                 }))
@@ -68,23 +90,29 @@ export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="description" className="text-right">
-              Description
+            <Label htmlFor="status" className="text-right">
+              Status
             </Label>
-            <Textarea
-              id="description"
-              value={newEntityType.description}
-              onChange={(e) =>
-                setNewEntityType((prev) => ({
+            <Select
+              value={entity.status}
+              onValueChange={(value) =>
+                setEntity((prev) => ({
                   ...prev,
-                  description: e.target.value,
+                  status: value,
                 }))
               }
-              placeholder="Brief description of the entity type"
-              className="col-span-3"
-            />
+            >
+              <SelectTrigger className="col-span-3">
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ACTIVE">Active</SelectItem>
+                <SelectItem value="INACTIVE">Inactive</SelectItem>
+                <SelectItem value="PENDING">Pending</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-          <Button onClick={handleSubmit}>Create Entity Type</Button>
+          <Button onClick={handleSubmit}>Save Changes</Button>
         </div>
       </DialogContent>
     </Dialog>

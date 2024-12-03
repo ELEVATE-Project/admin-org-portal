@@ -81,3 +81,52 @@ export const inheritEntityType = async (inheritData) => {
     throw error;
   }
 };
+export const deleteEntity = async (entityId) => {
+  try {
+    const response = await axios.delete(
+      "/mentoring/v1/entity/delete/" + entityId
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting entity", error);
+    throw error;
+  }
+};
+export const updateEntity = async (id, data) => {
+  try {
+    const response = await axios.put(
+      "/mentoring/v1/entity/update/" + id,
+      data,
+      {}
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error inheriting entity type", error);
+    throw error;
+  }
+};
+export const deleteEntityType = async (entityId) => {
+  try {
+    const response = await axios.delete(
+      "/mentoring/v1/entity/delete/" + entityId,
+      {}
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting entity", error);
+    throw error;
+  }
+};
+export const updateEntityType = async (inheritData) => {
+  try {
+    const response = await axios.post(
+      "/mentoring/v1/entity/update",
+      inheritData,
+      {}
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error inheriting entity type", error);
+    throw error;
+  }
+};

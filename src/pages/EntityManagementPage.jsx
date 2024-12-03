@@ -1,67 +1,61 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  fetchEntityTypes,
-  fetchEntitiesByType,
-  createEntityType,
-  createEntity,
-  inheritEntityType,
-} from "@/api/entityManagement";
+import { Plus } from "lucide-react";
 import Layout from "../components/Layout";
-import CreateEntityTypeDialog from "./CreateEntityTypeDialog";
+import { EntityTypesTable } from "./EntityTypesTable";
+import { CreateEntityTypeDialog } from "./CreateEntityTypeDialog";
+import { fetchEntityTypes, createEntityType } from "@/api/entityManagement";
+import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 
 const EntityManagementPage = () => {
   const [entityTypes, setEntityTypes] = useState([]);
-  const [selectedEntityType, setSelectedEntityType] = useState(null);
-  const [entities, setEntities] = useState([]);
-  const [newEntityType, setNewEntityType] = useState({ value: "", label: "" });
-  const [newEntity, setNewEntity] = useState({
-    value: "",
-    label: "",
-    entity_type_id: null,
-  });
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
   // Fetch entity types on component mount
   useEffect(() => {
     const loadEntityTypes = async () => {
       try {
         const response = await fetchEntityTypes();
-        setEntityTypes(response.result);
+        setEntityTypes(
+          response.result || [
+            // Hardcoded sample data for initial design
+            {
+              id: 1,
+              value: "user",
+              label: "User",
+              description: "System users and access management",
+              total_entities: 25,
+              created_at: "2024-01-15",
+            },
+            {
+              id: 2,
+              value: "role",
+              label: "Role",
+              description: "User roles and permissions",
+              total_entities: 10,
+              created_at: "2024-02-01",
+            },
+            {
+              id: 3,
+              value: "department",
+              label: "Department",
+              description: "Organizational departments",
+              total_entities: 15,
+              created_at: "2024-03-10",
+            },
+          ]
+        );
       } catch (error) {
         console.error("Failed to fetch entity types", error);
+        toast({
+          title: "Error",
+          description: "Failed to load entity types",
+          variant: "destructive",
+        });
       }
     };
     loadEntityTypes();
   }, []);
-
-  // Fetch entities when an entity type is selected
-  const handleEntityTypeSelect = async (entityType) => {
-    try {
-      setSelectedEntityType(entityType);
-      const response = await fetchEntitiesByType(entityType.id);
-      setEntities(response.result.data);
-    } catch (error) {
-      console.error("Failed to fetch entities", error);
-    }
-  };
 
   // Create a new entity type
   const handleCreateEntityType = async (newEntityTypeData) => {
@@ -72,10 +66,10 @@ const EntityManagementPage = () => {
       setEntityTypes((prevTypes) => [...prevTypes, response.result]);
 
       toast({
-        description: "Created",
+        description: "Entity Type Created Successfully",
       });
-      window.location.reload();
-      // loadEntityTypes();
+
+      setIsCreateDialogOpen(false);
     } catch (error) {
       console.error("Failed to create entity type", error);
       toast({
@@ -86,161 +80,30 @@ const EntityManagementPage = () => {
     }
   };
 
-  // Create a new entity
-  const handleCreateEntity = async () => {
-    try {
-      const entityToCreate = {
-        ...newEntity,
-        entity_type_id: selectedEntityType.id,
-        type: "SYSTEM",
-      };
-
-      const response = await createEntity(entityToCreate);
-      setEntities([...entities, response.result]);
-      setNewEntity({ value: "", label: "" });
-    } catch (error) {
-      console.error("Failed to create entity", error);
-    }
-  };
-
-  // Inherit entity type
-  const handleInheritEntityType = async (sourceType, targetLabel) => {
-    try {
-      await inheritEntityType({
-        entity_type_value: sourceType,
-        target_entity_type_label: targetLabel,
-      });
-      // Refresh entity types or show success message
-    } catch (error) {
-      console.error("Failed to inherit entity type", error);
-    }
-  };
-
   return (
     <Layout>
       <div className="container mx-auto p-4 space-y-4">
-        <h1 className="text-2xl font-bold mb-4">Entity Management</h1>
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-bold">Entity Management</h1>
+          <Button
+            onClick={() => setIsCreateDialogOpen(true)}
+            className="flex items-center gap-2"
+          >
+            <Plus className="h-4 w-4" />
+            Create Entity Type
+          </Button>
+        </div>
 
-        {/* Entity Types Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Entity Types</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {/* Create Entity Type Dialog */}
-            <CreateEntityTypeDialog onCreate={handleCreateEntityType} />
+        <EntityTypesTable
+          entityTypes={entityTypes}
+          onUpdateEntityTypes={setEntityTypes}
+        />
 
-            {/* Entity Types List */}
-            <div className="grid grid-cols-3 gap-4 mt-4">
-              {entityTypes.map((type) => (
-                <Button
-                  key={type.id}
-                  variant={
-                    selectedEntityType?.id === type.id ? "default" : "outline"
-                  }
-                  onClick={() => handleEntityTypeSelect(type)}
-                >
-                  {type.label}
-                </Button>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Entities Section */}
-        {selectedEntityType && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Entities for {selectedEntityType.label}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {/* Create Entity Dialog */}
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="outline">Create Entity</Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>
-                      Create New Entity for {selectedEntityType.label}
-                    </DialogTitle>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="entityValue" className="text-right">
-                        Value
-                      </Label>
-                      <Input
-                        id="entityValue"
-                        value={newEntity.value}
-                        onChange={(e) =>
-                          setNewEntity({ ...newEntity, value: e.target.value })
-                        }
-                        className="col-span-3"
-                      />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="entityLabel" className="text-right">
-                        Label
-                      </Label>
-                      <Input
-                        id="entityLabel"
-                        value={newEntity.label}
-                        onChange={(e) =>
-                          setNewEntity({ ...newEntity, label: e.target.value })
-                        }
-                        className="col-span-3"
-                      />
-                    </div>
-                    <Button onClick={handleCreateEntity}>Create</Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
-
-              {/* Entities Table */}
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableCell>ID</TableCell>
-                    <TableCell>Value</TableCell>
-                    <TableCell>Label</TableCell>
-                    <TableCell>Status</TableCell>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {entities.map((entity) => (
-                    <TableRow key={entity.id}>
-                      <TableCell>{entity.id}</TableCell>
-                      <TableCell>{entity.value}</TableCell>
-                      <TableCell>{entity.label}</TableCell>
-                      <TableCell>{entity.status}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Inherit Entity Type */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Inherit Entity Type</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="outline">Inherit Entity Type</Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Inherit Entity Type</DialogTitle>
-                </DialogHeader>
-                {/* You would implement a form here to select source and target entity types */}
-              </DialogContent>
-            </Dialog>
-          </CardContent>
-        </Card>
+        <CreateEntityTypeDialog
+          open={isCreateDialogOpen}
+          onOpenChange={setIsCreateDialogOpen}
+          onCreate={handleCreateEntityType}
+        />
       </div>
     </Layout>
   );
