@@ -140,7 +140,7 @@ const AllUsersPage = () => {
                     <TableCell>
                       <span
                         className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          user.status === "active"
+                          user.status === "ACTIVE"
                             ? "bg-green-100 text-green-800"
                             : "bg-gray-100 text-gray-800"
                         }`}
@@ -163,7 +163,10 @@ const AllUsersPage = () => {
                       <div className="flex items-center justify-end space-x-2">
                         <button
                           onClick={() =>
-                            assignOrgAdmin(user.email, user.organization.id)
+                            assignOrgAdmin(
+                              user.email,
+                              user.organization.organization_id
+                            )
                           }
                           className="p-2 rounded-lg hover:bg-gray-50"
                           title="Assign Org Admin"

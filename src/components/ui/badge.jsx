@@ -1,26 +1,34 @@
-// @/components/ui/badge.jsx
-import * as React from "react";
+import * as React from "react"
+import { cva } from "class-variance-authority";
 
-const Badge = React.forwardRef(
-  ({ className, variant = "default", ...props }, ref) => {
-    const variants = {
-      default: "bg-primary-100 text-primary-900",
-      secondary: "bg-gray-100 text-gray-900",
-      destructive: "bg-red-100 text-red-900",
-      success: "bg-green-100 text-green-900",
-      warning: "bg-yellow-100 text-yellow-900",
-      outline: "border border-gray-200 text-gray-900",
-    };
+import { cn } from "@/lib/utils"
 
-    return (
-      <div
-        ref={ref}
-        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors focus:outline-none ${variants[variant]} ${className}`}
-        {...props}
-      />
-    );
+const badgeVariants = cva(
+  "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  {
+    variants: {
+      variant: {
+        default:
+          "border-transparent bg-primary text-primary-foreground shadow hover:bg-primary/80",
+        secondary:
+          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        destructive:
+          "border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80",
+        outline: "text-foreground",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
   }
-);
-Badge.displayName = "Badge";
+)
 
-export { Badge };
+function Badge({
+  className,
+  variant,
+  ...props
+}) {
+  return (<div className={cn(badgeVariants({ variant }), className)} {...props} />);
+}
+
+export { Badge, badgeVariants }

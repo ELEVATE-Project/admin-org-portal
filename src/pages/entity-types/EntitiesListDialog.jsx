@@ -234,63 +234,63 @@ export const EntitiesListDialog = ({ open, onOpenChange, entityType }) => {
               Create Entity
             </Button>
           </div>
-
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>ID</TableHead>
-                <TableHead>Value</TableHead>
-                <TableHead>Label</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Created At</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredEntities.map((entity) => (
-                <TableRow key={entity.id}>
-                  <TableCell>{entity.id}</TableCell>
-                  <TableCell>{entity.value}</TableCell>
-                  <TableCell>{entity.label}</TableCell>
-                  <TableCell>
-                    <Badge variant={getStatusBadgeVariant(entity.status)}>
-                      {entity.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{entity.created_at}</TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem
-                          onSelect={() => {
-                            setSelectedEntity(entity);
-                            setIsEditEntityDialogOpen(true);
-                          }}
-                        >
-                          <Pencil className="mr-2 h-4 w-4" /> Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onSelect={() => {
-                            setSelectedEntity(entity);
-                            setIsDeleteAlertOpen(true);
-                          }}
-                          className="text-destructive focus:text-destructive"
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" /> Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
+          <div className="rounded-lg border border-gray-200 bg-white">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>ID</TableHead>
+                  <TableHead>Value</TableHead>
+                  <TableHead>Label</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Created At</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-
+              </TableHeader>
+              <TableBody>
+                {filteredEntities.map((entity) => (
+                  <TableRow key={entity.id}>
+                    <TableCell>{entity.id}</TableCell>
+                    <TableCell>{entity.value}</TableCell>
+                    <TableCell>{entity.label}</TableCell>
+                    <TableCell>
+                      <Badge variant={getStatusBadgeVariant(entity.status)}>
+                        {entity.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{entity.created_at}</TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuItem
+                            onSelect={() => {
+                              setSelectedEntity(entity);
+                              setIsEditEntityDialogOpen(true);
+                            }}
+                          >
+                            <Pencil className="mr-2 h-4 w-4" /> Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onSelect={() => {
+                              setSelectedEntity(entity);
+                              setIsDeleteAlertOpen(true);
+                            }}
+                            className="text-destructive focus:text-destructive"
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" /> Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
           {filteredEntities.length === 0 && (
             <div className="text-center text-muted-foreground py-4">
               No entities found

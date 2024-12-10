@@ -91,6 +91,7 @@ const ProfilePage = () => {
     const fetchUserData = async () => {
       try {
         const userData = JSON.parse(localStorage.getItem("user"));
+        console.log(userData);
         if (userData) {
           setUser(userData);
         } else {

@@ -12,7 +12,7 @@ export const USER_API = {
 };
 
 export const MENTORING_API = {
-  profile: "/mentoring/v1/profile/read",
+  profile: "/interface/v1/profile/read",
   userDelete: "/mentoring/v1/admin/userDelete",
   listMentees: "/mentoring/v1/mentees/list",
   organizationList: "/user/v1/organization/list",

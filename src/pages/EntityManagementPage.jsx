@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Plus } from "lucide-react";
 import Layout from "../components/Layout";
-import { EntityTypesTable } from "./EntityTypesTable";
-import { CreateEntityTypeDialog } from "./CreateEntityTypeDialog";
+import { EntityTypesTable } from "./entity-types/EntityTypesTable";
+import { CreateEntityTypeDialog } from "./entity-types/CreateEntityTypeDialog";
 import { fetchEntityTypes, createEntityType } from "@/api/entityManagement";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";

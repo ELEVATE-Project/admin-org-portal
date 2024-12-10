@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { OrganizationInfo } from "@/components/ui/actingOrg";
 import { logout } from "../api/api";
+//import { ModeToggle } from "@/components/mode-toggle";
 
 const Navbar = ({ onMenuClick, onSidebarToggle }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -133,7 +134,7 @@ const Navbar = ({ onMenuClick, onSidebarToggle }) => {
             <Moon className="w-6 h-6 text-gray-600 dark:text-gray-400" />
           )}
         </button> */}
-
+       {/*  <ModeToggle /> */}
         {/* Organization Info */}
         <div className="flex items-center space-x-2 text-sm">
           <OrganizationInfo orgId={orgId} storedOrgName={storedOrgName} />

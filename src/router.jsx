@@ -11,6 +11,7 @@ import ProfilePage from "./pages/ProfilePage";
 import UserListPage from "./pages/AllUsersPage";
 import EntityManagementPage from "./pages/EntityManagementPage";
 import FormsManagementPage from "./pages/FormsManagementPage";
+import NotificationTemplateManagement from "./pages/NotificationTemplateManagement";
 
 const AppRouter = () => {
   return (
@@ -23,6 +24,7 @@ const AppRouter = () => {
         <Route path="/users" element={<UserListPage />} />
         <Route path="/entity" element={<EntityManagementPage />} />
         <Route path="/forms" element={<FormsManagementPage />} />
+        <Route path="/notification-templates" element={<NotificationTemplateManagement />} />
         {/* Add more routes as needed */}
       </Routes>
     </Router>

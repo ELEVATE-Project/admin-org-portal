@@ -1,35 +1,47 @@
-import React from "react";
+import * as React from "react"
+import { cva } from "class-variance-authority";
 
-const Alert = React.forwardRef(
-  ({ className, variant = "default", ...props }, ref) => {
-    const variants = {
-      default: "bg-gray-100 text-gray-900",
-      destructive: "bg-red-50 text-red-900 border-red-500",
-    };
+import { cn } from "@/lib/utils"
 
-    return (
-      <div
-        ref={ref}
-        role="alert"
-        className={`
-          rounded-lg border p-4 absolute bottom-4 right-4 w-fit h-fit z-[999]
-          ${variants[variant]}
-          ${className}
-        `}
-        {...props}
-      />
-    );
+const alertVariants = cva(
+  "relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7",
+  {
+    variants: {
+      variant: {
+        default: "bg-background text-foreground",
+        destructive:
+          "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
   }
-);
-Alert.displayName = "Alert";
+)
+
+const Alert = React.forwardRef(({ className, variant, ...props }, ref) => (
+  <div
+    ref={ref}
+    role="alert"
+    className={cn(alertVariants({ variant }), className)}
+    {...props} />
+))
+Alert.displayName = "Alert"
+
+const AlertTitle = React.forwardRef(({ className, ...props }, ref) => (
+  <h5
+    ref={ref}
+    className={cn("mb-1 font-medium leading-none tracking-tight", className)}
+    {...props} />
+))
+AlertTitle.displayName = "AlertTitle"
 
 const AlertDescription = React.forwardRef(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={`text-sm [&_p]:leading-relaxed ${className}`}
-    {...props}
-  />
-));
-AlertDescription.displayName = "AlertDescription";
+    className={cn("text-sm [&_p]:leading-relaxed", className)}
+    {...props} />
+))
+AlertDescription.displayName = "AlertDescription"
 
-export { Alert, AlertDescription };
+export { Alert, AlertTitle, AlertDescription }

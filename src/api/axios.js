@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // Create an Axios instance with default configurations
 const axiosInstance = axios.create({
@@ -45,6 +46,9 @@ axiosInstance.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       // Redirect to login or show a message
       // Example: window.location.href = '/login'; or use a state management solution for routing
+      localStorage.clear();
+      // Use `window.location.href` since `useNavigate` isn't directly usable here
+      window.location.href = "/login";
     }
     return Promise.reject(error);
   }

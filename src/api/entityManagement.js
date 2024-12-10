@@ -39,7 +39,7 @@ export const fetchEntitiesByType = async (
 
 // Create a new entity type
 export const createEntityType = async (entityTypeData) => {
-  return await axios.post("/mentoring/v1/entity-type/create", {
+  const response = await axios.post("/mentoring/v1/entity-type/create", {
     value: entityTypeData.value,
     label: entityTypeData.label,
     data_type: entityTypeData.data_type,
@@ -50,6 +50,7 @@ export const createEntityType = async (entityTypeData) => {
     required: entityTypeData.required,
     regex: entityTypeData?.regex,
   });
+  return response.data;
 };
 
 // Create a new entity
@@ -68,11 +69,15 @@ export const createEntity = async (entity) => {
 };
 
 // Inherit an entity type
-export const inheritEntityType = async (inheritData) => {
+export const inheritEntityType = async (data) => {
   try {
+    const reqBody = {
+      entity_type_value: data.entityTypeValue,
+      target_entity_type_label: data.entityTypeLabel,
+    };
     const response = await axios.post(
       "/mentoring/v1/org-admin/inheritEntityType",
-      inheritData,
+      reqBody,
       {}
     );
     return response.data;
@@ -108,7 +113,7 @@ export const updateEntity = async (id, data) => {
 export const deleteEntityType = async (entityId) => {
   try {
     const response = await axios.delete(
-      "/mentoring/v1/entity/delete/" + entityId,
+      "/mentoring/v1/entity-type/delete/" + entityId,
       {}
     );
     return response.data;

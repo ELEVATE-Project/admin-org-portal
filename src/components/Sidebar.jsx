@@ -9,6 +9,7 @@ import {
   ChevronRight,
   LayoutList,
   FileText,
+  Bell,
 } from "lucide-react";
 import { logout } from "../api/api";
 
@@ -51,6 +52,11 @@ const Sidebar = ({ isCollapsed = false }) => {
       label: "Forms",
       icon: FileText,
       path: "/forms",
+    },
+    {
+      label: "Notification Templates",
+      icon: Bell,
+      path: "/notification-templates",
     },
     {
       label: "Settings",
