@@ -1,9 +1,9 @@
 // src/App.jsx
-import AppRouter from "./router";
-import "./index.css";
+import AppRouter from './router'
+import './index.css'
 
 const App = () => {
-  return <AppRouter />;
-};
+  return <AppRouter />
+}
 
-export default App;
+export default App

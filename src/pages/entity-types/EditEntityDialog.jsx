@@ -1,34 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select'
 
-export const EditEntityDialog = ({
-  open,
-  onOpenChange,
-  onEdit,
-  entityType,
-  initialEntity,
-}) => {
+export const EditEntityDialog = ({ open, onOpenChange, onEdit, entityType, initialEntity }) => {
   const [entity, setEntity] = useState({
-    value: "",
-    label: "",
-    status: "ACTIVE",
-  });
+    value: '',
+    label: '',
+    status: 'ACTIVE',
+  })
 
   // Populate form with initial entity data
   useEffect(() => {
@@ -37,22 +31,20 @@ export const EditEntityDialog = ({
         value: initialEntity.value,
         label: initialEntity.label,
         status: initialEntity.status,
-      });
+      })
     }
-  }, [initialEntity]);
+  }, [initialEntity])
 
   const handleSubmit = () => {
-    onEdit(entity);
-  };
+    onEdit(entity)
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit Entity for {entityType.label}</DialogTitle>
-          <DialogDescription>
-            Modify details of the existing entity
-          </DialogDescription>
+          <DialogDescription>Modify details of the existing entity</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
@@ -62,8 +54,8 @@ export const EditEntityDialog = ({
             <Input
               id="value"
               value={entity.value}
-              onChange={(e) =>
-                setEntity((prev) => ({
+              onChange={e =>
+                setEntity(prev => ({
                   ...prev,
                   value: e.target.value,
                 }))
@@ -79,8 +71,8 @@ export const EditEntityDialog = ({
             <Input
               id="label"
               value={entity.label}
-              onChange={(e) =>
-                setEntity((prev) => ({
+              onChange={e =>
+                setEntity(prev => ({
                   ...prev,
                   label: e.target.value,
                 }))
@@ -95,13 +87,12 @@ export const EditEntityDialog = ({
             </Label>
             <Select
               value={entity.status}
-              onValueChange={(value) =>
-                setEntity((prev) => ({
+              onValueChange={value =>
+                setEntity(prev => ({
                   ...prev,
                   status: value,
                 }))
-              }
-            >
+              }>
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
@@ -116,5 +107,5 @@ export const EditEntityDialog = ({
         </div>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

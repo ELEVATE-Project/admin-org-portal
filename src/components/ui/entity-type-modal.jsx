@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from './dialog';
-import { Input } from './input';
-import { Label } from './label';
-import { Button } from './button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select';
+import React, { useState } from 'react'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from './dialog'
+import { Input } from './input'
+import { Label } from './label'
+import { Button } from './button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select'
 
 export const EntityTypeModal = ({ isOpen, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -17,44 +24,42 @@ export const EntityTypeModal = ({ isOpen, onClose, onSubmit }) => {
     allow_custom_entities: true,
     model_names: [],
     required: false,
-    regex: ''
-  });
+    regex: '',
+  })
 
-  const modelNameOptions = ['UserExtension', 'Session'];
+  const modelNameOptions = ['UserExtension', 'Session']
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = e => {
+    const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
-      [name]: value
-    }));
-  };
+      [name]: value,
+    }))
+  }
 
-  const handleModelNameChange = (selectedValues) => {
+  const handleModelNameChange = selectedValues => {
     setFormData(prev => ({
       ...prev,
-      model_names: selectedValues
-    }));
-  };
+      model_names: selectedValues,
+    }))
+  }
 
   const handleSubmit = () => {
     // Basic validation
     if (!formData.value || !formData.label) {
-      alert('Please fill in all required fields');
-      return;
+      alert('Please fill in all required fields')
+      return
     }
 
-    onSubmit(formData);
-  };
+    onSubmit(formData)
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Create Entity Type</DialogTitle>
-          <DialogDescription>
-            Define a new entity type for your system
-          </DialogDescription>
+          <DialogDescription>Define a new entity type for your system</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
@@ -85,10 +90,7 @@ export const EntityTypeModal = ({ isOpen, onClose, onSubmit }) => {
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label className="text-right">Model Names</Label>
-            <Select 
-              onValueChange={handleModelNameChange}
-              multiple
-            >
+            <Select onValueChange={handleModelNameChange} multiple>
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Select model names" />
               </SelectTrigger>
@@ -105,10 +107,11 @@ export const EntityTypeModal = ({ isOpen, onClose, onSubmit }) => {
             <Label htmlFor="required" className="text-right">
               Required
             </Label>
-            <Select 
-              value={formData.required.toString()} 
-              onValueChange={(value) => setFormData(prev => ({...prev, required: value === 'true'}))}
-            >
+            <Select
+              value={formData.required.toString()}
+              onValueChange={value =>
+                setFormData(prev => ({ ...prev, required: value === 'true' }))
+              }>
               <SelectTrigger className="col-span-3">
                 <SelectValue />
               </SelectTrigger>
@@ -120,10 +123,12 @@ export const EntityTypeModal = ({ isOpen, onClose, onSubmit }) => {
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
           <Button onClick={handleSubmit}>Create Entity Type</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

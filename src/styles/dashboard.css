@@ -95,17 +95,16 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .modal-content {
-      width: 90%; /* Take up more space on smaller screens */
-      max-width: none; /* Remove max-width limitation */
-    }
+  .modal-content {
+    width: 90%; /* Take up more space on smaller screens */
+    max-width: none; /* Remove max-width limitation */
   }
-  
-  @media (max-width: 480px) {
-    .modal-content {
-      width: 95%; /* Take up almost full width on very small screens */
-    }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    width: 95%; /* Take up almost full width on very small screens */
   }
+}

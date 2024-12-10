@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -6,72 +6,66 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { toast } from "@/hooks/use-toast";
-import { inheritEntityType } from "@/api/entityManagement";
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { toast } from '@/hooks/use-toast'
+import { inheritEntityType } from '@/api/entityManagement'
 
-export const InheritEntityTypeDialog = ({
-  open,
-  onOpenChange,
-  entityType,
-  onInheritSuccess,
-}) => {
-  const [targetEntityTypeLabel, setTargetEntityTypeLabel] = useState("");
+export const InheritEntityTypeDialog = ({ open, onOpenChange, entityType, onInheritSuccess }) => {
+  const [targetEntityTypeLabel, setTargetEntityTypeLabel] = useState('')
 
   const handleInherit = async () => {
     if (!targetEntityTypeLabel.trim()) {
       toast({
-        title: "Validation Error",
-        description: "Please enter a target entity type label.",
-        variant: "destructive",
-      });
-      return;
+        title: 'Validation Error',
+        description: 'Please enter a target entity type label.',
+        variant: 'destructive',
+      })
+      return
     }
 
     try {
       const requestBody = {
         entityTypeValue: entityType.value,
         entityTypeLabel: targetEntityTypeLabel,
-      };
+      }
 
-      console.log("Inherit Request Body:", requestBody); // Logging the request body
+      console.log('Inherit Request Body:', requestBody) // Logging the request body
 
       // Ensure the request body is not empty
-      const response = await inheritEntityType(requestBody);
+      const response = await inheritEntityType(requestBody)
 
       toast({
-        title: "Entity Type Inherited",
+        title: 'Entity Type Inherited',
         description: `Successfully inherited ${entityType.label} to ${targetEntityTypeLabel}.`,
-      });
+      })
 
       // Reset input and close dialog
-      setTargetEntityTypeLabel(""); // Explicitly clearing the input
-      onOpenChange(false);
+      setTargetEntityTypeLabel('') // Explicitly clearing the input
+      onOpenChange(false)
 
       // Optional: call success callback if provided
-      onInheritSuccess?.(response.result);
+      onInheritSuccess?.(response.result)
     } catch (error) {
-      console.error("Inheritance Error:", error); // Log any errors
+      console.error('Inheritance Error:', error) // Log any errors
       toast({
-        title: "Inheritance Failed",
+        title: 'Inheritance Failed',
         description:
-          error.response.data.message ||
-          "Unable to inherit entity type. Please try again.",
-        variant: "destructive",
-      });
+          error.response.data.message || 'Unable to inherit entity type. Please try again.',
+        variant: 'destructive',
+      })
     }
-  };
+  }
 
   // Reset input when dialog closes
-  const handleOpenChange = (isOpen) => {
+  const handleOpenChange = isOpen => {
     if (!isOpen) {
-      setTargetEntityTypeLabel("");
+      setTargetEntityTypeLabel('')
     }
-    onOpenChange(isOpen);
-  };
+    onOpenChange(isOpen)
+  }
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -79,8 +73,7 @@ export const InheritEntityTypeDialog = ({
         <DialogHeader>
           <DialogTitle>Inherit Entity Type</DialogTitle>
           <DialogDescription>
-            Inherit the entity type "{entityType.label}" to a new target entity
-            type.
+            Inherit the entity type "{entityType.label}" to a new target entity type.
           </DialogDescription>
         </DialogHeader>
 
@@ -103,7 +96,7 @@ export const InheritEntityTypeDialog = ({
             <Input
               id="target-label"
               value={targetEntityTypeLabel}
-              onChange={(e) => setTargetEntityTypeLabel(e.target.value)}
+              onChange={e => setTargetEntityTypeLabel(e.target.value)}
               placeholder="Enter target entity type label"
               className="col-span-3"
             />
@@ -111,11 +104,7 @@ export const InheritEntityTypeDialog = ({
         </div>
 
         <DialogFooter>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => handleOpenChange(false)}
-          >
+          <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
             Cancel
           </Button>
           <Button type="submit" onClick={handleInherit}>
@@ -124,5 +113,5 @@ export const InheritEntityTypeDialog = ({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

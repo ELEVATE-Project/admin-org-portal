@@ -1,47 +1,40 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select'
 
-export const CreateEntityDialog = ({
-  open,
-  onOpenChange,
-  onCreate,
-  entityType,
-}) => {
+export const CreateEntityDialog = ({ open, onOpenChange, onCreate, entityType }) => {
   const [newEntity, setNewEntity] = useState({
-    value: "",
-    label: "",
-    status: "ACTIVE",
-  });
+    value: '',
+    label: '',
+    status: 'ACTIVE',
+  })
 
   const handleSubmit = () => {
-    onCreate(newEntity);
-    setNewEntity({ value: "", label: "", status: "ACTIVE" });
-  };
+    onCreate(newEntity)
+    setNewEntity({ value: '', label: '', status: 'ACTIVE' })
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create New Entity for {entityType.label}</DialogTitle>
-          <DialogDescription>
-            Add a new entity to the {entityType.label} type
-          </DialogDescription>
+          <DialogDescription>Add a new entity to the {entityType.label} type</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
@@ -51,8 +44,8 @@ export const CreateEntityDialog = ({
             <Input
               id="value"
               value={newEntity.value}
-              onChange={(e) =>
-                setNewEntity((prev) => ({
+              onChange={e =>
+                setNewEntity(prev => ({
                   ...prev,
                   value: e.target.value,
                 }))
@@ -68,8 +61,8 @@ export const CreateEntityDialog = ({
             <Input
               id="label"
               value={newEntity.label}
-              onChange={(e) =>
-                setNewEntity((prev) => ({
+              onChange={e =>
+                setNewEntity(prev => ({
                   ...prev,
                   label: e.target.value,
                 }))
@@ -84,13 +77,12 @@ export const CreateEntityDialog = ({
             </Label>
             <Select
               value={newEntity.status}
-              onValueChange={(value) =>
-                setNewEntity((prev) => ({
+              onValueChange={value =>
+                setNewEntity(prev => ({
                   ...prev,
                   status: value,
                 }))
-              }
-            >
+              }>
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
@@ -105,5 +97,5 @@ export const CreateEntityDialog = ({
         </div>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

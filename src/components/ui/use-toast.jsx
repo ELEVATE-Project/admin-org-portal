@@ -1,12 +1,12 @@
-import * as React from "react"
-import { Toaster } from "@/components/ui/toaster"
+import * as React from 'react'
+import { Toaster } from '@/components/ui/toaster'
 
 const ToastContext = React.createContext({})
 
 export const ToastProvider = ({ children }) => {
   const [toast, setToast] = React.useState(null)
 
-  const showToast = React.useCallback((options) => {
+  const showToast = React.useCallback(options => {
     setToast(options)
   }, [])
 
@@ -24,11 +24,11 @@ export const ToastProvider = ({ children }) => {
 
 export const useToast = () => {
   const context = React.useContext(ToastContext)
-  
+
   if (!context) {
-    throw new Error("useToast must be used within a ToastProvider")
+    throw new Error('useToast must be used within a ToastProvider')
   }
-  
+
   return context
 }
 

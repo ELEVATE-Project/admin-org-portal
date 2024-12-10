@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from './dialog';
-import { Input } from './input';
-import { Label } from './label';
-import { Button } from './button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select';
+import React, { useState } from 'react'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from './dialog'
+import { Input } from './input'
+import { Label } from './label'
+import { Button } from './button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select'
 
 export const EntityModal = ({ isOpen, onClose, onSubmit, entityType }) => {
   const [formData, setFormData] = useState({
@@ -11,37 +18,35 @@ export const EntityModal = ({ isOpen, onClose, onSubmit, entityType }) => {
     label: '',
     status: 'ACTIVE',
     type: 'SYSTEM',
-    entity_type_id: entityType?.id || null
-  });
+    entity_type_id: entityType?.id || null,
+  })
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = e => {
+    const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
-      [name]: value
-    }));
-  };
+      [name]: value,
+    }))
+  }
 
   const handleSubmit = () => {
     // Basic validation
     if (!formData.value || !formData.label) {
-      alert('Please fill in all required fields');
-      return;
+      alert('Please fill in all required fields')
+      return
     }
 
-    onSubmit(formData);
-  };
+    onSubmit(formData)
+  }
 
-  if (!entityType) return null;
+  if (!entityType) return null
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Create Entity for {entityType.label}</DialogTitle>
-          <DialogDescription>
-            Define a new entity under {entityType.label}
-          </DialogDescription>
+          <DialogDescription>Define a new entity under {entityType.label}</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
@@ -74,10 +79,9 @@ export const EntityModal = ({ isOpen, onClose, onSubmit, entityType }) => {
             <Label htmlFor="status" className="text-right">
               Status
             </Label>
-            <Select 
-              value={formData.status} 
-              onValueChange={(value) => setFormData(prev => ({...prev, status: value}))}
-            >
+            <Select
+              value={formData.status}
+              onValueChange={value => setFormData(prev => ({ ...prev, status: value }))}>
               <SelectTrigger className="col-span-3">
                 <SelectValue />
               </SelectTrigger>
@@ -89,10 +93,12 @@ export const EntityModal = ({ isOpen, onClose, onSubmit, entityType }) => {
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
           <Button onClick={handleSubmit}>Create Entity</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

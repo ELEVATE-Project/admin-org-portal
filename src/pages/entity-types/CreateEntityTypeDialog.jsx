@@ -1,78 +1,71 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select'
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Info } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Info } from 'lucide-react'
 
 export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
   const [newEntityType, setNewEntityType] = useState({
-    value: "",
-    label: "",
-    status: "ACTIVE",
-    type: "SYSTEM",
-    data_type: "STRING",
+    value: '',
+    label: '',
+    status: 'ACTIVE',
+    type: 'SYSTEM',
+    data_type: 'STRING',
     allow_filtering: false,
     has_entities: false,
     allow_custom_entities: false,
     model_names: [],
     required: false,
-    regex: "",
-  });
+    regex: '',
+  })
 
   const handleSubmit = () => {
     // Remove empty regex before sending
-    const submitData = { ...newEntityType };
-    if (submitData.regex == null || submitData.regex === "") {
-      delete submitData.regex;
+    const submitData = { ...newEntityType }
+    if (submitData.regex == null || submitData.regex === '') {
+      delete submitData.regex
     }
 
-    onCreate(submitData);
+    onCreate(submitData)
     // Reset form
     setNewEntityType({
-      value: "",
-      label: "",
-      status: "ACTIVE",
-      type: "SYSTEM",
-      data_type: "STRING",
+      value: '',
+      label: '',
+      status: 'ACTIVE',
+      type: 'SYSTEM',
+      data_type: 'STRING',
       allow_filtering: false,
       has_entities: false,
       allow_custom_entities: false,
       model_names: [],
       required: false,
-      regex: "",
-    });
-  };
+      regex: '',
+    })
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create New Entity Type</DialogTitle>
-          <DialogDescription>
-            Define a new entity type for your system
-          </DialogDescription>
+          <DialogDescription>Define a new entity type for your system</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
@@ -82,8 +75,8 @@ export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
             <Input
               id="value"
               value={newEntityType.value}
-              onChange={(e) =>
-                setNewEntityType((prev) => ({
+              onChange={e =>
+                setNewEntityType(prev => ({
                   ...prev,
                   value: e.target.value,
                 }))
@@ -100,8 +93,8 @@ export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
             <Input
               id="label"
               value={newEntityType.label}
-              onChange={(e) =>
-                setNewEntityType((prev) => ({
+              onChange={e =>
+                setNewEntityType(prev => ({
                   ...prev,
                   label: e.target.value,
                 }))
@@ -117,13 +110,12 @@ export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
             </Label>
             <Select
               value={newEntityType.status}
-              onValueChange={(value) =>
-                setNewEntityType((prev) => ({
+              onValueChange={value =>
+                setNewEntityType(prev => ({
                   ...prev,
                   status: value,
                 }))
-              }
-            >
+              }>
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
@@ -140,13 +132,12 @@ export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
             </Label>
             <Select
               value={newEntityType.type}
-              onValueChange={(value) =>
-                setNewEntityType((prev) => ({
+              onValueChange={value =>
+                setNewEntityType(prev => ({
                   ...prev,
                   type: value,
                 }))
-              }
-            >
+              }>
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Select type" />
               </SelectTrigger>
@@ -163,13 +154,12 @@ export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
             </Label>
             <Select
               value={newEntityType.data_type}
-              onValueChange={(value) =>
-                setNewEntityType((prev) => ({
+              onValueChange={value =>
+                setNewEntityType(prev => ({
                   ...prev,
                   data_type: value,
                 }))
-              }
-            >
+              }>
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Select data type" />
               </SelectTrigger>
@@ -189,15 +179,13 @@ export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="userExtension"
-                  checked={newEntityType.model_names.includes("UserExtension")}
-                  onCheckedChange={(checked) =>
-                    setNewEntityType((prev) => ({
+                  checked={newEntityType.model_names.includes('UserExtension')}
+                  onCheckedChange={checked =>
+                    setNewEntityType(prev => ({
                       ...prev,
                       model_names: checked
-                        ? [...prev.model_names, "UserExtension"]
-                        : prev.model_names.filter(
-                            (name) => name !== "UserExtension"
-                          ),
+                        ? [...prev.model_names, 'UserExtension']
+                        : prev.model_names.filter(name => name !== 'UserExtension'),
                     }))
                   }
                 />
@@ -206,13 +194,13 @@ export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="session"
-                  checked={newEntityType.model_names.includes("Session")}
-                  onCheckedChange={(checked) =>
-                    setNewEntityType((prev) => ({
+                  checked={newEntityType.model_names.includes('Session')}
+                  onCheckedChange={checked =>
+                    setNewEntityType(prev => ({
                       ...prev,
                       model_names: checked
-                        ? [...prev.model_names, "Session"]
-                        : prev.model_names.filter((name) => name !== "Session"),
+                        ? [...prev.model_names, 'Session']
+                        : prev.model_names.filter(name => name !== 'Session'),
                     }))
                   }
                 />
@@ -227,8 +215,8 @@ export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
             <Input
               id="regex"
               value={newEntityType.regex}
-              onChange={(value) =>
-                setNewEntityType((prev) => ({
+              onChange={value =>
+                setNewEntityType(prev => ({
                   ...prev,
                   regex: value,
                 }))
@@ -244,8 +232,8 @@ export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
                   <Checkbox
                     id="allow_filtering"
                     checked={newEntityType.allow_filtering}
-                    onCheckedChange={(checked) =>
-                      setNewEntityType((prev) => ({
+                    onCheckedChange={checked =>
+                      setNewEntityType(prev => ({
                         ...prev,
                         allow_filtering: checked,
                       }))
@@ -253,17 +241,14 @@ export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
                   />
                   <Label
                     htmlFor="allow_filtering"
-                    className="cursor-pointer group-hover:text-primary transition-colors"
-                  >
+                    className="cursor-pointer group-hover:text-primary transition-colors">
                     Allow Filtering
                   </Label>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Info className="h-4 w-4 text-muted-foreground" />
                     </TooltipTrigger>
-                    <TooltipContent>
-                      Enables filtering options for this entity type
-                    </TooltipContent>
+                    <TooltipContent>Enables filtering options for this entity type</TooltipContent>
                   </Tooltip>
                 </div>
 
@@ -271,8 +256,8 @@ export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
                   <Checkbox
                     id="has_entities"
                     checked={newEntityType.has_entities}
-                    onCheckedChange={(checked) =>
-                      setNewEntityType((prev) => ({
+                    onCheckedChange={checked =>
+                      setNewEntityType(prev => ({
                         ...prev,
                         has_entities: checked,
                       }))
@@ -280,8 +265,7 @@ export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
                   />
                   <Label
                     htmlFor="has_entities"
-                    className="cursor-pointer group-hover:text-primary transition-colors"
-                  >
+                    className="cursor-pointer group-hover:text-primary transition-colors">
                     Has Entities
                   </Label>
                   <Tooltip>
@@ -300,8 +284,8 @@ export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
                   <Checkbox
                     id="allow_custom_entities"
                     checked={newEntityType.allow_custom_entities}
-                    onCheckedChange={(checked) =>
-                      setNewEntityType((prev) => ({
+                    onCheckedChange={checked =>
+                      setNewEntityType(prev => ({
                         ...prev,
                         allow_custom_entities: checked,
                       }))
@@ -309,8 +293,7 @@ export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
                   />
                   <Label
                     htmlFor="allow_custom_entities"
-                    className="cursor-pointer group-hover:text-primary transition-colors"
-                  >
+                    className="cursor-pointer group-hover:text-primary transition-colors">
                     Allow Custom Entities
                   </Label>
                   <Tooltip>
@@ -327,8 +310,8 @@ export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
                   <Checkbox
                     id="required"
                     checked={newEntityType.required}
-                    onCheckedChange={(checked) =>
-                      setNewEntityType((prev) => ({
+                    onCheckedChange={checked =>
+                      setNewEntityType(prev => ({
                         ...prev,
                         required: checked,
                       }))
@@ -336,17 +319,14 @@ export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
                   />
                   <Label
                     htmlFor="required"
-                    className="cursor-pointer group-hover:text-primary transition-colors"
-                  >
+                    className="cursor-pointer group-hover:text-primary transition-colors">
                     Required
                   </Label>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Info className="h-4 w-4 text-muted-foreground" />
                     </TooltipTrigger>
-                    <TooltipContent>
-                      Specifies if this entity type is mandatory
-                    </TooltipContent>
+                    <TooltipContent>Specifies if this entity type is mandatory</TooltipContent>
                   </Tooltip>
                 </div>
               </div>
@@ -357,5 +337,5 @@ export const CreateEntityTypeDialog = ({ open, onOpenChange, onCreate }) => {
         </div>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

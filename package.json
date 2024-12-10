@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,html,css,json,md}\""
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -86,6 +87,7 @@
     "eslint-plugin-react-refresh": "^0.4.13",
     "globals": "^15.11.0",
     "postcss": "^8.4.47",
+    "prettier": "^3.4.2",
     "tailwindcss": "^3.4.14",
     "vite": "^5.4.9"
   }

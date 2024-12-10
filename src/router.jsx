@@ -1,17 +1,12 @@
 // src/router.js
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
-import DashboardPage from "./pages/DashboardPage";
-import ProfilePage from "./pages/ProfilePage";
-import UserListPage from "./pages/AllUsersPage";
-import EntityManagementPage from "./pages/EntityManagementPage";
-import FormsManagementPage from "./pages/FormsManagementPage";
-import NotificationTemplateManagement from "./pages/NotificationTemplateManagement";
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
+import LoginPage from './pages/LoginPage'
+import DashboardPage from './pages/DashboardPage'
+import ProfilePage from './pages/ProfilePage'
+import UserListPage from './pages/AllUsersPage'
+import EntityManagementPage from './pages/EntityManagementPage'
+import FormsManagementPage from './pages/FormsManagementPage'
+import NotificationTemplateManagement from './pages/NotificationTemplateManagement'
 
 const AppRouter = () => {
   return (
@@ -28,7 +23,7 @@ const AppRouter = () => {
         {/* Add more routes as needed */}
       </Routes>
     </Router>
-  );
-};
+  )
+}
 
-export default AppRouter;
+export default AppRouter

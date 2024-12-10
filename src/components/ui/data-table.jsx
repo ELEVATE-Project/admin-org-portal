@@ -1,5 +1,5 @@
 // src/components/ui/data-table.jsx
-import React from "react";
+import React from 'react'
 import {
   Table,
   TableBody,
@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table'
 
 export function DataTable({ columns, data, loading, emptyMessage }) {
   if (loading) {
@@ -18,7 +18,7 @@ export function DataTable({ columns, data, loading, emptyMessage }) {
           <p className="text-sm text-gray-500">Loading data...</p>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -26,7 +26,7 @@ export function DataTable({ columns, data, loading, emptyMessage }) {
       <Table>
         <TableHeader>
           <TableRow>
-            {columns.map((column) => (
+            {columns.map(column => (
               <TableHead key={column.key} className={column.className}>
                 {column.title}
               </TableHead>
@@ -37,13 +37,13 @@ export function DataTable({ columns, data, loading, emptyMessage }) {
           {data.length === 0 ? (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-32 text-center">
-                {emptyMessage || "No data available"}
+                {emptyMessage || 'No data available'}
               </TableCell>
             </TableRow>
           ) : (
             data.map((row, index) => (
               <TableRow key={row.id || index}>
-                {columns.map((column) => (
+                {columns.map(column => (
                   <TableCell key={column.key} className={column.className}>
                     {column.render ? column.render(row) : row[column.key]}
                   </TableCell>
@@ -54,5 +54,5 @@ export function DataTable({ columns, data, loading, emptyMessage }) {
         </TableBody>
       </Table>
     </div>
-  );
+  )
 }

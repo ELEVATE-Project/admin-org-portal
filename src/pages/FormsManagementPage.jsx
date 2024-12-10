@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import React, { useState, useEffect } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import {
   Table,
   TableBody,
@@ -10,7 +10,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table'
 import {
   Dialog,
   DialogContent,
@@ -19,192 +19,187 @@ import {
   DialogTrigger,
   DialogFooter,
   DialogClose,
-} from "@/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Edit, Eye, Trash2, Plus } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
-import { Label } from "@/components/ui/label";
-import {
-  fetchForms,
-  fetchFormDetails,
-  updateForm,
-  createForm,
-} from "@/api/form";
-import Layout from "../components/Layout";
+} from '@/components/ui/dialog'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Edit, Eye, Trash2, Plus } from 'lucide-react'
+import { toast } from '@/hooks/use-toast'
+import { Label } from '@/components/ui/label'
+import { fetchForms, fetchFormDetails, updateForm, createForm } from '@/api/form'
+import Layout from '../components/Layout'
 
 const FormsManagementPage = () => {
-  const [forms, setForms] = useState([]);
-  const [selectedForm, setSelectedForm] = useState(null);
-  const [editedFormData, setEditedFormData] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [forms, setForms] = useState([])
+  const [selectedForm, setSelectedForm] = useState(null)
+  const [editedFormData, setEditedFormData] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
 
   // New state for create form
-  const [newFormType, setNewFormType] = useState("");
-  const [newFormSubType, setNewFormSubType] = useState("");
-  const [newFormData, setNewFormData] = useState("{}");
+  const [newFormType, setNewFormType] = useState('')
+  const [newFormSubType, setNewFormSubType] = useState('')
+  const [newFormData, setNewFormData] = useState('{}')
 
   useEffect(() => {
     const loadForms = async () => {
       try {
-        setIsLoading(true);
-        const response = await fetchForms();
-        setForms(response.result || []);
+        setIsLoading(true)
+        const response = await fetchForms()
+        setForms(response.result || [])
       } catch (error) {
         toast({
-          title: "Error",
-          description: "Failed to fetch forms",
-          variant: "destructive",
-        });
+          title: 'Error',
+          description: 'Failed to fetch forms',
+          variant: 'destructive',
+        })
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
-    };
-    loadForms();
-  }, []);
+    }
+    loadForms()
+  }, [])
 
   const handleCreateForm = async () => {
     try {
       // Validate inputs
       if (!newFormType || !newFormSubType) {
         toast({
-          title: "Validation Error",
-          description: "Type and Sub Type are required",
-          variant: "destructive",
-        });
-        return;
+          title: 'Validation Error',
+          description: 'Type and Sub Type are required',
+          variant: 'destructive',
+        })
+        return
       }
 
       // Parse form data
-      let parsedData = {};
+      let parsedData = {}
       try {
-        parsedData = JSON.parse(newFormData);
+        parsedData = JSON.parse(newFormData)
       } catch (error) {
         toast({
-          title: "Invalid JSON",
-          description: "Please provide a valid JSON for form data",
-          variant: "destructive",
-        });
-        return;
+          title: 'Invalid JSON',
+          description: 'Please provide a valid JSON for form data',
+          variant: 'destructive',
+        })
+        return
       }
 
-      setIsLoading(true);
+      setIsLoading(true)
       const response = await createForm({
         type: newFormType,
         sub_type: newFormSubType,
         data: parsedData,
-      });
+      })
 
-      if (response.responseCode === "OK") {
+      if (response.responseCode === 'OK') {
         toast({
-          title: "Success",
-          description: "Form created successfully",
-        });
+          title: 'Success',
+          description: 'Form created successfully',
+        })
 
         // Refresh forms list
-        const formsResponse = await fetchForms();
-        setForms(formsResponse.result || []);
+        const formsResponse = await fetchForms()
+        setForms(formsResponse.result || [])
 
         // Reset create form fields and close dialog
-        setNewFormType("");
-        setNewFormSubType("");
-        setNewFormData("{}");
-        setIsCreateDialogOpen(false);
+        setNewFormType('')
+        setNewFormSubType('')
+        setNewFormData('{}')
+        setIsCreateDialogOpen(false)
       } else {
         toast({
-          title: "Error",
-          description: "Failed to create form",
-          variant: "destructive",
-        });
+          title: 'Error',
+          description: 'Failed to create form',
+          variant: 'destructive',
+        })
       }
     } catch (error) {
-      console.error(error);
+      console.error(error)
       toast({
-        title: "Error",
-        description: error.message || "Failed to create form",
-        variant: "destructive",
-      });
+        title: 'Error',
+        description: error.message || 'Failed to create form',
+        variant: 'destructive',
+      })
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
   useEffect(() => {
     const loadForms = async () => {
       try {
-        setIsLoading(true);
-        const response = await fetchForms();
-        setForms(response.result || []);
+        setIsLoading(true)
+        const response = await fetchForms()
+        setForms(response.result || [])
       } catch (error) {
         toast({
-          title: "Error",
-          description: "Failed to fetch forms",
-          variant: "destructive",
-        });
+          title: 'Error',
+          description: 'Failed to fetch forms',
+          variant: 'destructive',
+        })
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
-    };
-    loadForms();
-  }, []);
+    }
+    loadForms()
+  }, [])
 
-  const handleFormSelect = async (form) => {
+  const handleFormSelect = async form => {
     try {
-      setIsLoading(true);
-      const response = await fetchFormDetails(form.id);
-      const details = response.result;
-      setSelectedForm(details);
-      setEditedFormData(JSON.stringify(details.data, null, 2));
+      setIsLoading(true)
+      const response = await fetchFormDetails(form.id)
+      const details = response.result
+      setSelectedForm(details)
+      setEditedFormData(JSON.stringify(details.data, null, 2))
     } catch (error) {
       toast({
-        title: "Error",
+        title: 'Error',
         description: `Failed to fetch form details for ID ${form.id}`,
-        variant: "destructive",
-      });
+        variant: 'destructive',
+      })
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleFormUpdate = async () => {
-    if (!selectedForm) return;
+    if (!selectedForm) return
 
     try {
-      const parsedData = JSON.parse(editedFormData);
-      setIsLoading(true);
+      const parsedData = JSON.parse(editedFormData)
+      setIsLoading(true)
 
       const updateResponse = await updateForm(selectedForm.id, {
         type: selectedForm.type,
         sub_type: selectedForm.sub_type,
         data: parsedData,
-      });
+      })
 
-      if (updateResponse.responseCode === "OK") {
+      if (updateResponse.responseCode === 'OK') {
         toast({
-          title: "Success",
-          description: "Form updated successfully",
-        });
+          title: 'Success',
+          description: 'Form updated successfully',
+        })
 
         // Refresh forms list
-        const formsResponse = await fetchForms();
-        setForms(formsResponse.result || []);
+        const formsResponse = await fetchForms()
+        setForms(formsResponse.result || [])
       } else {
         toast({
-          title: "Error",
-          description: "Failed to update form",
-          variant: "destructive",
-        });
+          title: 'Error',
+          description: 'Failed to update form',
+          variant: 'destructive',
+        })
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: error.message || "Failed to update form",
-        variant: "destructive",
-      });
+        title: 'Error',
+        description: error.message || 'Failed to update form',
+        variant: 'destructive',
+      })
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <Layout>
@@ -214,17 +209,13 @@ const FormsManagementPage = () => {
 
           <Button
             onClick={() => setIsCreateDialogOpen(true)}
-            className="flex items-center gap-2 ml-auto"
-          >
+            className="flex items-center gap-2 ml-auto">
             <Plus className="h-4 w-4" /> Create New Form
           </Button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Create Form Dialog */}
-          <Dialog
-            open={isCreateDialogOpen}
-            onOpenChange={setIsCreateDialogOpen}
-          >
+          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
             <DialogContent className="sm:max-w-[600px]">
               <DialogHeader>
                 <DialogTitle>Create New Form</DialogTitle>
@@ -237,7 +228,7 @@ const FormsManagementPage = () => {
                   <Input
                     id="type"
                     value={newFormType}
-                    onChange={(e) => setNewFormType(e.target.value)}
+                    onChange={e => setNewFormType(e.target.value)}
                     className="col-span-3"
                     placeholder="Enter form type"
                   />
@@ -249,7 +240,7 @@ const FormsManagementPage = () => {
                   <Input
                     id="subType"
                     value={newFormSubType}
-                    onChange={(e) => setNewFormSubType(e.target.value)}
+                    onChange={e => setNewFormSubType(e.target.value)}
                     className="col-span-3"
                     placeholder="Enter form sub type"
                   />
@@ -261,7 +252,7 @@ const FormsManagementPage = () => {
                   <Textarea
                     id="formData"
                     value={newFormData}
-                    onChange={(e) => setNewFormData(e.target.value)}
+                    onChange={e => setNewFormData(e.target.value)}
                     className="col-span-3 min-h-[200px] font-mono"
                     placeholder="Enter form configuration JSON"
                   />
@@ -273,12 +264,8 @@ const FormsManagementPage = () => {
                     Cancel
                   </Button>
                 </DialogClose>
-                <Button
-                  type="submit"
-                  onClick={handleCreateForm}
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Creating..." : "Create Form"}
+                <Button type="submit" onClick={handleCreateForm} disabled={isLoading}>
+                  {isLoading ? 'Creating...' : 'Create Form'}
                 </Button>
               </DialogFooter>
             </DialogContent>
@@ -299,12 +286,11 @@ const FormsManagementPage = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {forms.map((form) => (
+                  {forms.map(form => (
                     <TableRow
                       key={form.id}
                       onClick={() => handleFormSelect(form)}
-                      className="cursor-pointer hover:bg-muted/50"
-                    >
+                      className="cursor-pointer hover:bg-muted/50">
                       <TableCell>{form.id}</TableCell>
                       <TableCell>{form.type}</TableCell>
                       <TableCell>{form.version}</TableCell>
@@ -325,9 +311,7 @@ const FormsManagementPage = () => {
           <Card className="md:col-span-2">
             <CardHeader>
               <CardTitle>
-                {selectedForm
-                  ? `Form Details: ${selectedForm.type}`
-                  : "Select a Form"}
+                {selectedForm ? `Form Details: ${selectedForm.type}` : 'Select a Form'}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -355,11 +339,7 @@ const FormsManagementPage = () => {
                           </div>
                           <div>
                             <p className="font-semibold">Created At:</p>
-                            <p>
-                              {new Date(
-                                selectedForm.created_at
-                              ).toLocaleString()}
-                            </p>
+                            <p>{new Date(selectedForm.created_at).toLocaleString()}</p>
                           </div>
                         </div>
                       </CardContent>
@@ -370,14 +350,12 @@ const FormsManagementPage = () => {
                       <CardContent className="pt-6">
                         <Textarea
                           value={editedFormData}
-                          onChange={(e) => setEditedFormData(e.target.value)}
+                          onChange={e => setEditedFormData(e.target.value)}
                           placeholder="Edit form configuration JSON"
                           className="min-h-[300px] font-mono"
                         />
                         <div className="flex justify-end mt-4">
-                          <Button onClick={handleFormUpdate}>
-                            Update Form
-                          </Button>
+                          <Button onClick={handleFormUpdate}>Update Form</Button>
                         </div>
                       </CardContent>
                     </Card>
@@ -393,7 +371,7 @@ const FormsManagementPage = () => {
         </div>
       </div>
     </Layout>
-  );
-};
+  )
+}
 
-export default FormsManagementPage;
+export default FormsManagementPage
