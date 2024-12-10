@@ -42,6 +42,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from '@/hooks/use-toast'
+import OrganizationsList from '@/components/OrganizationsList'
 
 const DashboardPage = () => {
   // Declare state variables
@@ -93,8 +94,9 @@ const DashboardPage = () => {
   const fetchOrganizations = async () => {
     try {
       const res = await listOrganizations()
-      setOrganizations(res.data.result.data)
+      setOrganizations(res.result.data)
     } catch (err) {
+      console.log(err)
       showNotification('Failed to fetch organizations.', 'error')
     }
   }
@@ -365,88 +367,14 @@ const DashboardPage = () => {
         </Dialog>
 
         {/* List Organizations Dialog */}
-        <Dialog open={listOrgOpen} onOpenChange={setListOrgOpen}>
-          <DialogContent className="sm:max-w-[800px]">
-            <DialogHeader>
-              <DialogTitle>Organizations</DialogTitle>
-            </DialogHeader>
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Input
-                  placeholder="Search organizations..."
-                  className="w-64"
-                  icon={<Search className="w-4 h-4" />}
-                />
-                <div className="relative">
-                  <Button
-                    variant="outline"
-                    className="flex items-center gap-2"
-                    onClick={() => setShowRowsPerPageSelector(prev => !prev)}>
-                    {rowsPerPage} <ArrowDown className="w-4 h-4" />
-                  </Button>
-                  {showRowsPerPageSelector && (
-                    <div className="absolute top-full right-0 bg-white shadow-lg rounded-md mt-2 w-24">
-                      <Select
-                        value={rowsPerPage.toString()}
-                        onValueChange={handleRowsPerPageChange}>
-                        <SelectContent>
-                          <SelectItem value="5">5</SelectItem>
-                          <SelectItem value="10">10</SelectItem>
-                          <SelectItem value="25">25</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <Button onClick={() => setCreateOrgOpen(true)}>
-                <Plus className="w-4 h-4 mr-2" />
-                Add New
-              </Button>
-            </div>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Code</TableHead>
-                  <TableHead>Description</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {organizations.length > 0 ? (
-                  organizations.map(org => (
-                    <TableRow key={org.id}>
-                      <TableCell className="font-medium">{org.name}</TableCell>
-                      <TableCell>{org.code}</TableCell>
-                      <TableCell>{org.description}</TableCell>
-                      <TableCell>
-                        <button
-                          onClick={() => handleViewDetails(org)}
-                          className="p-2 rounded-lg hover:bg-red-50"
-                          title="Deactivate Organization">
-                          <ShieldMinus className="h-4 w-4 text-red-600" />
-                        </button>
-                        <button
-                          onClick={() => actAsOrgAdmin(org)}
-                          className="p-2 rounded-lg hover:bg-red-50"
-                          title="Act as Organization Admin">
-                          <UserCog className="text-gray-600 hover:text-blue-500" />
-                        </button>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={4} className="text-center">
-                      No organizations found.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </DialogContent>
-        </Dialog>
+        <OrganizationsList
+          listOrgOpen={listOrgOpen}
+          setListOrgOpen={setListOrgOpen}
+          setCreateOrgOpen={setCreateOrgOpen}
+          onViewDetails={handleViewDetails}
+          onActAsOrgAdmin={actAsOrgAdmin}
+          listOrganizations={listOrganizations} // Pass the API function
+        />
 
         {/* Notification */}
         {notification.show && (

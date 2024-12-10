@@ -115,12 +115,19 @@ export const getMenteesList = async (limit = 50, page = 1, search = '') => {
  * @param {number} limit - Number of results per page
  * @returns {Promise} API response
  */
-export const listOrganizations = async (page = 1, limit = 100) => {
-  return await axiosInstance.get(`${MENTORING_API.organizationList}?page=${page}&limit=${limit}`, {
-    headers: {
-      internal_access_token: 'internal_access_token',
-    },
-  })
+export const listOrganizations = async (page = 1, limit = 10) => {
+  try {
+    const response = await axiosInstance.get(`${MENTORING_API.organizationList}`, {
+      params: { page, limit },
+      headers: {
+        internal_access_token: 'internal_access_token',
+      },
+    })
+    return response.data // Return the entire response
+  } catch (error) {
+    console.error('Error fetching organizations', error)
+    throw error
+  }
 }
 
 /**

@@ -10,10 +10,16 @@ import {
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem } from '@/components/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Search, Plus, ArrowDown, ShieldMinus, UserCog } from 'lucide-react'
 
-// Pagination Component (remains the same as previous implementation)
+// Pagination Component
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const pageNumbers = []
   for (let i = 1; i <= totalPages; i++) {
@@ -53,14 +59,13 @@ const OrganizationsList = ({
   setCreateOrgOpen,
   onViewDetails,
   onActAsOrgAdmin,
-  listOrganizations, // Pass the API function as a prop
+  listOrganizations, // API function to list organizations
 }) => {
   const [organizations, setOrganizations] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [searchTerm, setSearchTerm] = useState('')
-  const [showRowsPerPageSelector, setShowRowsPerPageSelector] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
 
@@ -71,13 +76,17 @@ const OrganizationsList = ({
     try {
       const response = await listOrganizations(currentPage, rowsPerPage)
 
-      // Adjust this based on the actual response structure
       if (response.responseCode === 'OK') {
         const organizationsData = response.result.data
-        setOrganizations(organizationsData)
 
-        // Calculate total pages based on count or manually set
-        // Adjust this calculation based on your backend pagination
+        // Use functional update to ensure state is set correctly
+        setOrganizations(prev => {
+          // Only update if the data has actually changed
+          const isDataChanged = JSON.stringify(prev) !== JSON.stringify(organizationsData)
+          return isDataChanged ? organizationsData : prev
+        })
+
+        // Calculate total pages
         const totalCount = response.result.count
         setTotalPages(Math.ceil(totalCount / rowsPerPage))
       } else {
@@ -88,7 +97,10 @@ const OrganizationsList = ({
       setError(error.message)
       setOrganizations([])
     } finally {
-      setIsLoading(false)
+      // Use a small timeout to smooth out the loading state
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 300)
     }
   }, [listOrganizations, currentPage, rowsPerPage])
 
@@ -107,19 +119,21 @@ const OrganizationsList = ({
     }
   }, [listOrgOpen, currentPage, rowsPerPage, fetchOrganizations])
 
-  // Rows per page handler
-  const handleRowsPerPageChange = value => {
-    setRowsPerPage(Number(value))
+  // Optimize rows per page change
+  const handleRowsPerPageChange = useCallback(value => {
+    // Reset to first page when changing page size
     setCurrentPage(1)
-    setShowRowsPerPageSelector(false)
-  }
+
+    // Use Number to ensure it's a number
+    setRowsPerPage(Number(value))
+  }, [])
 
   // Page change handler
   const handlePageChange = page => {
     setCurrentPage(page)
   }
 
-  // Render loading or error states
+  // Render loading state
   if (isLoading) {
     return (
       <Dialog open={listOrgOpen} onOpenChange={setListOrgOpen}>
@@ -130,6 +144,7 @@ const OrganizationsList = ({
     )
   }
 
+  // Render error state
   if (error) {
     return (
       <Dialog open={listOrgOpen} onOpenChange={setListOrgOpen}>
@@ -147,7 +162,7 @@ const OrganizationsList = ({
           <DialogTitle>Organizations</DialogTitle>
         </DialogHeader>
 
-        {/* Search and Rows Selector */}
+        {/* Search and Controls */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Input
@@ -157,26 +172,21 @@ const OrganizationsList = ({
               onChange={e => setSearchTerm(e.target.value)}
               icon={<Search className="w-4 h-4" />}
             />
-            <div className="relative">
-              <Button
-                variant="outline"
-                className="flex items-center gap-2"
-                onClick={() => setShowRowsPerPageSelector(prev => !prev)}>
-                {rowsPerPage} <ArrowDown className="w-4 h-4" />
-              </Button>
-              {showRowsPerPageSelector && (
-                <div className="absolute top-full right-0 bg-white shadow-lg rounded-md mt-2 w-24">
-                  <Select value={rowsPerPage.toString()} onValueChange={handleRowsPerPageChange}>
-                    <SelectContent>
-                      <SelectItem value="5">5</SelectItem>
-                      <SelectItem value="10">10</SelectItem>
-                      <SelectItem value="25">25</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-            </div>
+
+            {/* Page Size Selector */}
+            <Select value={rowsPerPage.toString()} onValueChange={handleRowsPerPageChange}>
+              <SelectTrigger className="w-24">
+                <SelectValue placeholder={`${rowsPerPage} rows`} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="5">5</SelectItem>
+                <SelectItem value="10">10</SelectItem>
+                <SelectItem value="25">25</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
+
+          {/* Add New Organization Button */}
           <Button onClick={() => setCreateOrgOpen(true)}>
             <Plus className="w-4 h-4 mr-2" />
             Add New
