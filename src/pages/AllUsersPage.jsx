@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+//import { useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
 import { getMenteesList, deleteUserFromBoth, addOrgAdmin } from '../api/api'
 import { Search, Trash2, Shield, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'
@@ -20,7 +20,7 @@ const AllUsersPage = () => {
   const [limit] = useState(10)
   const [totalUsers, setTotalUsers] = useState(0)
   const [loading, setLoading] = useState(true)
-  const navigate = useNavigate()
+  //const navigate = useNavigate()
   const token = localStorage.getItem('access_token')
 
   const fetchAllUsers = async () => {

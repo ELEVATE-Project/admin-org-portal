@@ -3,14 +3,12 @@ import Layout from '../components/Layout'
 import UserAvatar from '@/components/ui/user-avatar'
 import InfoCard from '@/components/ui/info-card'
 import {
-  UserCircle,
   Mail,
   Star,
   Calendar,
   MapPin,
   Edit,
   Loader2,
-  Building,
   Phone,
   Globe,
   GraduationCap,

@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, splitVendorChunkPlugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from 'tailwindcss' // Import Tailwind CSS
 import autoprefixer from 'autoprefixer' // Import Autoprefixer
@@ -6,7 +6,7 @@ import path from 'path' // Import path to use for alias configuration
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), splitVendorChunkPlugin()],
   optimizeDeps: {
     include: ['@mui/material', '@mui/icons-material', '@emotion/react', '@emotion/styled'],
   },
