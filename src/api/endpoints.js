@@ -1,7 +1,7 @@
 // src/api/apiEndpoints.js
 
 export const USER_API = {
-  login: '/user/v1/admin/login',
+  login: '/user/v1/account/login',
   logout: '/user/v1/account/logout',
   createUser: '/user/v1/admin/create',
   deleteUser: userId => `/user/v1/admin/deleteUser/${userId}`,

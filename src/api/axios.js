@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 // Create an Axios instance with default configurations
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3569/', // Use base URL from env file or fallback
+  baseURL: 'https://dev.elevate-apis.shikshalokam.org/', // Use base URL from env file or fallback
   timeout: 10000, // Optional: Set timeout for all requests
   headers: {
     'Content-Type': 'application/json',
@@ -20,7 +20,8 @@ axiosInstance.interceptors.request.use(
 
     if (token) {
       // Set the token for each request in the Authorization header
-      config.headers['X-auth-token'] = `bearer ${token}`
+      config.headers['x-auth-token'] = token;
+
     }
     const orgHeader = localStorage.getItem('custom_org')
 

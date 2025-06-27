@@ -19,9 +19,10 @@ const AuthForms = () => {
   const [isLogin, setIsLogin] = useState(true)
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
+    identifier: '',
     password: '',
     secret_code: '',
+    email: '',
   })
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -36,7 +37,7 @@ const AuthForms = () => {
 
   const validateForm = () => {
     if (isLogin) {
-      if (!formData.email || !formData.password) {
+      if (!formData.identifier || !formData.password) {
         setError('All fields are required')
         return false
       }
@@ -46,10 +47,10 @@ const AuthForms = () => {
         return false
       }
     }
-    if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      setError('Please enter a valid email address')
-      return false
-    }
+    // if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    //   setError('Please enter a valid email address')
+    //   return false
+    // }
     return true
   }
 
@@ -142,11 +143,11 @@ const AuthForms = () => {
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
-                  id="email"
-                  name="email"
-                  type="email"
+                  id="identifier"
+                  name="identifier"
+                  type="text"
                   placeholder="Enter your email"
-                  value={formData.email}
+                  value={formData.identifier}
                   onChange={handleInputChange}
                   className="w-full"
                   autoComplete="email"
