@@ -165,7 +165,7 @@ const ProfilePage = () => {
                 <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
                 <p className="text-sm text-gray-500">
                   <div className="space-y-1">
-                    {user.user_roles.map(role => (
+                    {(user.user_roles || []).map(role => (
                       <span
                         key={role.id}
                         className="inline-block px-2 py-1 text-xs font-medium bg-primary-50 
@@ -190,7 +190,7 @@ const ProfilePage = () => {
                 label="Roles"
                 value={
                   <div className="space-y-1">
-                    {user?.designation.map(role => (
+                    {(user?.designation|| []).map(role => (
                       <span
                         key={role.id}
                         className="inline-block px-2 py-1 text-xs font-medium bg-primary-50 

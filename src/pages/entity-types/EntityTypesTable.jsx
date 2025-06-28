@@ -70,7 +70,7 @@ export const EntityTypesTable = ({ entityTypes, onUpdateEntityTypes, onInheritSu
                 <TableCell>{type.label}</TableCell>
                 <TableCell>{type.value}</TableCell>
                 <TableCell>
-                  {type.model_names.map(modelName => (
+                  {(type.model_names || []).map(modelName => (
                     <span
                       key={modelName}
                       className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800 mr-1">

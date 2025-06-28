@@ -124,7 +124,7 @@ const AllUsersPage = () => {
                   </TableCell>
                 </TableRow>
               ) : users.length > 0 ? (
-                users.map(user => (
+                users.map || [] (user => (
                   <TableRow key={user.id}>
                     <TableCell className="font-medium">{user.name}</TableCell>
                     <TableCell>{user.email}</TableCell>
@@ -139,7 +139,7 @@ const AllUsersPage = () => {
                       </span>
                     </TableCell>
                     <TableCell>
-                      {user.user_roles.map(role => (
+                      {(user.user_roles.map || [] )(role => (
                         <span
                           key={role.title}
                           className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800 mr-1">
