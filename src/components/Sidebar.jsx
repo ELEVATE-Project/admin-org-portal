@@ -39,6 +39,11 @@ const Sidebar = ({ isCollapsed = false }) => {
       icon: Users,
       path: '/users',
     },
+     {
+    label: 'Tenants',
+    icon: Users,
+    path: '/tenants',
+  },
     {
       label: 'Entity Types',
       icon: LayoutList,

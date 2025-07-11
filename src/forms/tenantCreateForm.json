@@ -1,0 +1,82 @@
+{
+  "type": "form",
+  "subType": "tenantCreate",
+  "data": [
+    {
+      "type": "group",
+      "label": "Basic Info",
+      "fields": [
+        {
+          "name": "name",
+          "label": "Tenant Name",
+          "type": "text",
+          "placeHolder": "Ex. Shikshalokam",
+          "validators": { "required": true }
+        },
+        {
+          "name": "code",
+          "label": "Tenant Code",
+          "type": "text",
+          "placeHolder": "Ex. shikshalokam25",
+          "validators": {
+            "required": true,
+            "pattern": "^[a-z0-9\\-]+$"
+          },
+          "errorMessage": {
+            "pattern": "Only lowercase letters, numbers, and dashes allowed"
+          }
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "type": "textarea",
+          "placeHolder": "Enter a short description",
+            "colSpan": 2
+        },
+        {
+          "name": "domain",
+          "label": "Custom Domain (optional)",
+          "type": "text",
+          "placeHolder": "e.g. your.domain.com"
+        },
+        {
+          "name": "logo",
+          "label": "Logo URL",
+          "type": "text",
+          "placeHolder": "https://example.com/logo.png"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "label": "Theming",
+      "fields": [
+        {
+          "name": "theme.primaryColor",
+          "label": "Primary Color",
+          "type": "color",
+          "defaultValue": "#1E40AF"
+        },
+        {
+          "name": "theme.secondaryColor",
+          "label": "Secondary Color",
+          "type": "color",
+          "defaultValue": "#F59E0B"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "label": "Meta",
+      "fields": [
+        {
+          "name": "meta.tags",
+          "label": "Tags (comma separated)",
+          "type": "text",
+          "placeHolder": "e.g. education, leadership"
+          
+        }
+      ]
+    }
+  ]
+}
