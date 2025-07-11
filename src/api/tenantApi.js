@@ -29,7 +29,7 @@ export const getTenantByCode = async (code) => {
 }
 
 
-// Create or update tenant
+// Create tenant
 export const createOrUpdateTenant = async tenantData => {
   try {
 
