@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import { getTenantByCode } from '@/api/tenantApi'
 import Layout from '@/components/Layout'
-
+import TenantCreateModal from '@/pages/Tenant/TenantCreateModal'
+import { Button } from '@/components/ui/button'
 
 const TenantDetail = () => {
   const { code } = useParams()
   const location = useLocation()
   const [tenant, setTenant] = useState(location.state || null)
+  const [editOpen, setEditOpen] = useState(false)
 
   useEffect(() => {
     const fetchTenant = async () => {
@@ -40,7 +42,10 @@ const TenantDetail = () => {
   return (
     <Layout>
       <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-xl mt-6 space-y-6">
-        <h1 className="text-2xl font-semibold text-gray-800">Tenant Details</h1>
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-semibold text-gray-800">Tenant Details</h1>
+          <Button onClick={() => setEditOpen(true)}>Edit Tenant</Button>
+        </div>
 
         {/* Basic Info */}
         <div className="space-y-2">
@@ -139,6 +144,18 @@ const TenantDetail = () => {
           <div><strong>Updated At:</strong> {tenant.updated_at ? new Date(tenant.updated_at).toLocaleString('en-IN') : 'N/A'}</div>
         </div>
       </div>
+
+      {/* Edit Tenant Modal */}
+      <TenantCreateModal
+        open={editOpen}
+        setOpen={setEditOpen}
+        mode="edit"
+        initialData={tenant}
+        onAdd={(updatedTenant) => {
+          setTenant(updatedTenant)
+          setEditOpen(false)
+        }}
+      />
     </Layout>
   )
 }

@@ -52,3 +52,23 @@ export const createOrUpdateTenant = async tenantData => {
     throw error
   }
 }
+
+export const updateTenant = async (tenantCode, tenantData) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/user/v1/tenant/update/${tenantCode}`,
+      tenantData,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': localStorage.getItem('access_token'),
+          'x-tenant': 'mentoring',
+        },
+      }
+    )
+    return response.data.result
+  } catch (error) {
+    console.error('❌ Failed to update tenant:', error)
+    throw error
+  }
+}

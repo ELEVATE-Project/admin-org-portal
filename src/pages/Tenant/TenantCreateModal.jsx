@@ -6,40 +6,52 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { createOrUpdateTenant } from '@/api/tenantApi'
+import { createOrUpdateTenant, updateTenant } from '@/api/tenantApi'
 import DynamicForm from '@/components/ui/DynamicForm'
 import tenantFormJson from '@/forms/tenantCreateForm.json'
 import { Loader2 } from 'lucide-react'
 
-const TenantCreateModal = ({ open, setOpen, onAdd }) => {
+const TenantCreateModal = ({ open, setOpen, onAdd, initialData = {}, mode = 'create' }) => {
   const [formFields, setFormFields] = useState([])
   const [flatFields, setFlatFields] = useState([])
   const [formData, setFormData] = useState({})
   const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(false)
 
-  // Helper: flatten fields from group structure
   const flattenFields = (fields) => {
-    return fields.flatMap(field => {
-      if (field.type === 'group' && Array.isArray(field.fields)) {
-        return flattenFields(field.fields)
-      }
-      return field
-    })
+    return fields.flatMap(field => field.type === 'group' ? flattenFields(field.fields) : field)
   }
 
   useEffect(() => {
     if (!open) return
-    const fields = tenantFormJson?.data || []
 
+    const fields = tenantFormJson?.data || []
     const flattened = flattenFields(fields)
-    setFormFields(fields) // for rendering
-    setFlatFields(flattened) // for validation/init
+
+    setFormFields(fields)
+    setFlatFields(flattened)
 
     const initialState = flattened.reduce((acc, field) => {
-      acc[field.name] = field.type === 'chip' ? [] : ''
+      acc[field.name] =
+        initialData?.[field.name] ??
+        (field.type === 'chip' ? [] : '')
       return acc
     }, {})
+
+    // Patch nested fields like theming, meta.tags
+    if (initialData.theming?.primaryColor) {
+      initialState['theme.primaryColor'] = initialData.theming.primaryColor
+    }
+    if (initialData.theming?.secondaryColor) {
+      initialState['theme.secondaryColor'] = initialData.theming.secondaryColor
+    }
+    if (Array.isArray(initialData.meta?.tags)) {
+      initialState['meta.tags'] = initialData.meta.tags.join(', ')
+    }
+    if (Array.isArray(initialData.domains) && initialData.domains[0]?.domain) {
+      initialState['domain'] = initialData.domains[0].domain
+    }
+
     setFormData(initialState)
     setErrors({})
   }, [open])
@@ -72,40 +84,40 @@ const TenantCreateModal = ({ open, setOpen, onAdd }) => {
     setLoading(true)
 
     try {
-      const tags =
-        typeof formData['meta.tags'] === 'string'
-          ? formData['meta.tags'].split(',').map(tag => tag.trim())
-          : []
+      const tags = typeof formData['meta.tags'] === 'string'
+        ? formData['meta.tags'].split(',').map(t => t.trim()).filter(Boolean)
+        : []
 
       const theming = {
-         primaryColor: formData['theme.primaryColor']
-       }
-       if (formData['theme.secondaryColor']) {
-         theming.secondaryColor = formData['theme.secondaryColor']
+        primaryColor: formData['theme.primaryColor'],
+        ...(formData['theme.secondaryColor'] && {
+          secondaryColor: formData['theme.secondaryColor'],
+        }),
       }
 
-      const tenantData = {
+      const payload = {
         name: formData.name,
         code: formData.code,
         description: formData.description,
         logo: formData.logo || '',
-        theming: {
-          primaryColor: formData['theme.primaryColor'],
-          secondaryColor: formData['theme.secondaryColor'],
-        },
+        theming,
         meta: { tags },
         domains: [
-          formData.domain?.trim() ||
-            `https://${formData.code}.shikshalokam.org`,
+          formData.domain?.trim() || `https://${formData.code}.shikshalokam.org`,
         ],
       }
 
-      const result = await createOrUpdateTenant(tenantData)
-      onAdd(result)
+      if (mode === 'edit') {
+        await updateTenant(initialData.code, payload)
+      } else {
+        await createOrUpdateTenant(payload)
+      }
+
+      onAdd(payload)
       setOpen(false)
-    } catch (error) {
-      console.error('❌ Failed to create tenant:', error)
-      alert('Failed to create tenant. Check console for details.')
+    } catch (err) {
+      console.error(`❌ Failed to ${mode} tenant:`, err)
+      alert(`Failed to ${mode} tenant. Check console for details.`)
     } finally {
       setLoading(false)
     }
@@ -122,6 +134,7 @@ const TenantCreateModal = ({ open, setOpen, onAdd }) => {
         formData={formData}
         errors={errors}
         onChange={handleChange}
+        mode={mode}
       />
     </div>
   )
@@ -144,18 +157,15 @@ const TenantCreateModal = ({ open, setOpen, onAdd }) => {
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl p-6 shadow-md">
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold text-gray-800">
-            Create New Tenant
+            {mode === 'edit' ? 'Edit Tenant' : 'Create New Tenant'}
           </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6 mt-4">
           {formFields.map(field =>
-            field.type === 'group'
-              ? renderGroupSection(field)
-              : null // skip ungrouped
+            field.type === 'group' ? renderGroupSection(field) : null
           )}
 
-          {/* Footer Actions */}
           <div className="flex justify-end gap-3 pt-6 border-t border-gray-200 mt-6">
             <Button
               type="button"
@@ -170,10 +180,10 @@ const TenantCreateModal = ({ open, setOpen, onAdd }) => {
               {loading ? (
                 <div className="flex items-center gap-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Creating...
+                  {mode === 'edit' ? 'Updating...' : 'Creating...'}
                 </div>
               ) : (
-                'Create'
+                mode === 'edit' ? 'Update' : 'Create'
               )}
             </Button>
           </div>

@@ -19,11 +19,7 @@
           "type": "text",
           "placeHolder": "Ex. shikshalokam25",
           "validators": {
-            "required": true,
-            "pattern": "^[a-z0-9\\-]+$"
-          },
-          "errorMessage": {
-            "pattern": "Only lowercase letters, numbers, and dashes allowed"
+            "required": true          
           }
         },
         {

@@ -16,7 +16,7 @@ import {
   AccordionContent,
 } from '@/components/ui/accordion'
 
-const DynamicForm = ({ fields, formData, errors, onChange }) => {
+const DynamicForm = ({ fields, formData, errors, onChange, mode }) => {
   const renderField = field => {
     const { name, label, type, placeHolder, options = [] } = field
     const value = formData[name] || ''
@@ -35,7 +35,7 @@ const DynamicForm = ({ fields, formData, errors, onChange }) => {
                 placeholder={placeHolder}
                 value={value}
                 onChange={e => onChange(name, e.target.value)}
-                className="w-full border rounded px-3 py-2 text-sm"
+                className="w-full border rounded px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                 rows={3}
               />
             ) : (
@@ -44,6 +44,8 @@ const DynamicForm = ({ fields, formData, errors, onChange }) => {
                 placeholder={placeHolder}
                 value={value}
                 onChange={e => onChange(name, e.target.value)}
+                className="focus:outline-none focus:ring-2 focus:ring-blue-500"
+                disabled={name === 'code' && mode === 'edit'} // <-- add this
               />
             )}
             {errors[name] && (
@@ -53,27 +55,26 @@ const DynamicForm = ({ fields, formData, errors, onChange }) => {
         )
 
       case 'color':
-  return (
-    <div key={name} className={commonClasses}>
-      <Label htmlFor={name}>{label}</Label>
-      <div className="flex items-center gap-4">
-        <Input
-          id={name}
-          type="color"
-          value={value || ''}
-          onChange={e => onChange(name, e.target.value)}
-          className="w-16 h-10 p-1 border rounded"
-        />
-        <span className="text-sm font-mono text-gray-600">
-          {value || 'No color selected'}
-        </span>
-      </div>
-      {errors[name] && (
-        <p className="text-xs text-red-500 mt-1">{errors[name]}</p>
-      )}
-    </div>
-  )
-
+        return (
+          <div key={name} className={commonClasses}>
+            <Label htmlFor={name}>{label}</Label>
+            <div className="flex items-center gap-4">
+              <Input
+                id={name}
+                type="color"
+                value={value || '#000000'} // Default to black instead of empty
+                onChange={e => onChange(name, e.target.value)}
+                className="w-16 h-10 p-1 border rounded cursor-pointer"
+              />
+              <span className="text-sm font-mono text-gray-600">
+                {value || '#000000'}
+              </span>
+            </div>
+            {errors[name] && (
+              <p className="text-xs text-red-500 mt-1">{errors[name]}</p>
+            )}
+          </div>
+        )
 
       case 'select':
         return (
@@ -147,12 +148,11 @@ const DynamicForm = ({ fields, formData, errors, onChange }) => {
   )
 
   return (
-    <>
-      <form className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {otherFields.map(renderField)}
-
         {primaryColorField && renderField(primaryColorField)}
-      </form>
+      </div>
 
       {secondaryColorField && (
         <Accordion type="single" collapsible className="w-full">
@@ -168,7 +168,7 @@ const DynamicForm = ({ fields, formData, errors, onChange }) => {
           </AccordionItem>
         </Accordion>
       )}
-    </>
+    </div>
   )
 }
 
