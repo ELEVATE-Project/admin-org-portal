@@ -72,3 +72,45 @@ export const updateTenant = async (tenantCode, tenantData) => {
     throw error
   }
 }
+
+// Add domain to tenant
+export const addTenantDomain = async (tenantCode, domains) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/user/v1/tenant/addDomain/${tenantCode}`,
+      { domains },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': localStorage.getItem('access_token'),
+          'x-tenant': 'mentoring',
+        },
+      }
+    )
+    return response.data
+  } catch (error) {
+    console.error('❌ Failed to add domain:', error)
+    throw error
+  }
+}
+
+// Remove domain from tenant
+export const removeTenantDomain = async (tenantCode, domains) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/user/v1/tenant/removeDomain/${tenantCode}`,
+      { domains },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': localStorage.getItem('access_token'),
+          'x-tenant': 'mentoring',
+        },
+      }
+    )
+    return response.data
+  } catch (error) {
+    console.error('❌ Failed to remove domain:', error)
+    throw error
+  }
+}

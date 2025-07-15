@@ -11,17 +11,16 @@ const TenantDetail = () => {
   const [tenant, setTenant] = useState(location.state || null)
   const [editOpen, setEditOpen] = useState(false)
 
-  useEffect(() => {
-    const fetchTenant = async () => {
-      try {
-        const { result } = await getTenantByCode(code)
-        console.log('🎯 Tenant Result:', result)
-        if (result) setTenant(result)
-      } catch (error) {
-        console.error('❌ Failed to load tenant:', error)
-      }
+  const fetchTenant = async () => {
+    try {
+      const { result } = await getTenantByCode(code)
+      if (result) setTenant(result)
+    } catch (error) {
+      console.error('❌ Failed to load tenant:', error)
     }
+  }
 
+  useEffect(() => {
     fetchTenant()
   }, [code])
 
@@ -151,8 +150,8 @@ const TenantDetail = () => {
         setOpen={setEditOpen}
         mode="edit"
         initialData={tenant}
-        onAdd={(updatedTenant) => {
-          setTenant(updatedTenant)
+        onAdd={() => {
+          fetchTenant()
           setEditOpen(false)
         }}
       />
