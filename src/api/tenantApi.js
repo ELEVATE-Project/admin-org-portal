@@ -19,13 +19,6 @@ export const createOrUpdateTenant = async tenantData => {
   const response = await axiosInstance.post(
     `${import.meta.env.VITE_BASE_URL}${TENANT_API.update}`,
     tenantData,
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        'x-auth-token': localStorage.getItem('access_token'),
-        'x-tenant': 'mentoring',
-      },
-    }
   )
   return response.data.result
 }
@@ -34,13 +27,6 @@ export const updateTenant = async (tenantCode, tenantData) => {
   const response = await axiosInstance.post(
     `${import.meta.env.VITE_BASE_URL}${TENANT_API.updateByCode(tenantCode)}`,
     tenantData,
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        'x-auth-token': localStorage.getItem('access_token'),
-        'x-tenant': 'mentoring',
-      },
-    }
   )
   return response.data.result
 }
@@ -50,13 +36,6 @@ export const addTenantDomain = async (tenantCode, domains) => {
   const response = await axiosInstance.post(
     `${import.meta.env.VITE_BASE_URL}${TENANT_API.addDomain(tenantCode)}`,
     { domains },
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        'x-auth-token': localStorage.getItem('access_token'),
-        'x-tenant': 'mentoring',
-      },
-    }
   )
   return response.data
 }
@@ -66,13 +45,6 @@ export const removeTenantDomain = async (tenantCode, domains) => {
   const response = await axiosInstance.post(
     `${import.meta.env.VITE_BASE_URL}${TENANT_API.removeDomain(tenantCode)}`,
     { domains },
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        'x-auth-token': localStorage.getItem('access_token'),
-        'x-tenant': 'mentoring',
-      },
-    }
   )
   return response.data
 }
