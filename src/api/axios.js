@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 // Create an Axios instance with default configurations
 const axiosInstance = axios.create({
-  baseURL: 'https://dev.elevate-apis.shikshalokam.org/', // Use base URL from env file or fallback
+  baseURL: import.meta.env.VITE_BASE_URL, // Use base URL from env file
   timeout: 10000, // Optional: Set timeout for all requests
   headers: {
     'Content-Type': 'application/json',

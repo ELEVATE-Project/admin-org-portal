@@ -17,43 +17,47 @@ import {
 } from '@/components/ui/accordion'
 
 const DynamicForm = ({ fields, formData, errors, onChange, mode }) => {
+  const renderTextField = (field, value, error) => (
+    <div key={field.name} className="space-y-1 w-full">
+      <Label htmlFor={field.name}>{field.label}</Label>
+      <Input
+        id={field.name}
+        placeholder={field.placeHolder}
+        value={value}
+        onChange={e => onChange(field.name, e.target.value)}
+        className="focus:outline-none focus:ring-2 focus:ring-blue-500"
+        disabled={field.name === 'code' && mode === 'edit'}
+      />
+      {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
+    </div>
+  )
+
+  const renderTextareaField = (field, value, error) => (
+    <div key={field.name} className="space-y-1 w-full">
+      <Label htmlFor={field.name}>{field.label}</Label>
+      <textarea
+        id={field.name}
+        placeholder={field.placeHolder}
+        value={value}
+        onChange={e => onChange(field.name, e.target.value)}
+        className="w-full border rounded px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+        rows={3}
+      />
+      {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
+    </div>
+  )
+
   const renderField = field => {
     const { name, label, type, placeHolder, options = [] } = field
     const value = formData[name] || ''
-
+    const error = errors[name]
     const commonClasses = 'space-y-1 w-full'
 
     switch (type) {
       case 'text':
+        return renderTextField(field, value, error)
       case 'textarea':
-        return (
-          <div key={name} className={commonClasses}>
-            <Label htmlFor={name}>{label}</Label>
-            {type === 'textarea' ? (
-              <textarea
-                id={name}
-                placeholder={placeHolder}
-                value={value}
-                onChange={e => onChange(name, e.target.value)}
-                className="w-full border rounded px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                rows={3}
-              />
-            ) : (
-              <Input
-                id={name}
-                placeholder={placeHolder}
-                value={value}
-                onChange={e => onChange(name, e.target.value)}
-                className="focus:outline-none focus:ring-2 focus:ring-blue-500"
-                disabled={name === 'code' && mode === 'edit'} // <-- add this
-              />
-            )}
-            {errors[name] && (
-              <p className="text-xs text-red-500 mt-1">{errors[name]}</p>
-            )}
-          </div>
-        )
-
+        return renderTextareaField(field, value, error)
       case 'color':
         return (
           <div key={name} className={commonClasses}>
@@ -62,7 +66,7 @@ const DynamicForm = ({ fields, formData, errors, onChange, mode }) => {
               <Input
                 id={name}
                 type="color"
-                value={value || '#000000'} // Default to black instead of empty
+                value={value || '#000000'}
                 onChange={e => onChange(name, e.target.value)}
                 className="w-16 h-10 p-1 border rounded cursor-pointer"
               />
@@ -75,7 +79,6 @@ const DynamicForm = ({ fields, formData, errors, onChange, mode }) => {
             )}
           </div>
         )
-
       case 'select':
         return (
           <div key={name} className={commonClasses}>
@@ -97,7 +100,6 @@ const DynamicForm = ({ fields, formData, errors, onChange, mode }) => {
             )}
           </div>
         )
-
       case 'chip':
         return (
           <div key={name} className={`${commonClasses} md:col-span-2`}>
@@ -135,7 +137,6 @@ const DynamicForm = ({ fields, formData, errors, onChange, mode }) => {
             )}
           </div>
         )
-
       default:
         return null
     }

@@ -22,6 +22,7 @@ const TenantCreateModal = ({ open, setOpen, onAdd, initialData = {}, mode = 'cre
   const [domainInput, setDomainInput] = useState('')
   const [addLoading, setAddLoading] = useState(false)
   const [removeLoadingDomain, setRemoveLoadingDomain] = useState('')
+  const [submitError, setSubmitError] = useState('')
   const { toast } = useToast ? useToast() : { toast: () => {} }
 
   const flattenFields = (fields) => {
@@ -130,7 +131,7 @@ const TenantCreateModal = ({ open, setOpen, onAdd, initialData = {}, mode = 'cre
   const handleSubmit = async () => {
     if (!validate()) return
     setLoading(true)
-
+    setSubmitError('')
     try {
       const tags = typeof formData['meta.tags'] === 'string'
         ? formData['meta.tags'].split(',').map(t => t.trim()).filter(Boolean)
@@ -163,7 +164,7 @@ const TenantCreateModal = ({ open, setOpen, onAdd, initialData = {}, mode = 'cre
       setOpen(false)
     } catch (err) {
       console.error(`❌ Failed to ${mode} tenant:`, err)
-      alert(`Failed to ${mode} tenant. Check console for details.`)
+      setSubmitError(`Failed to ${mode} tenant. ${err?.response?.data?.message || err.message || 'Check console for details.'}`)
     } finally {
       setLoading(false)
     }
@@ -259,6 +260,9 @@ const TenantCreateModal = ({ open, setOpen, onAdd, initialData = {}, mode = 'cre
         <div className="space-y-6 mt-4">
           {formFields.map(field =>
             field.type === 'group' ? renderGroupSection(field) : null
+          )}
+          {submitError && (
+            <div className="text-red-600 text-sm mb-2">{submitError}</div>
           )}
 
           <div className="flex justify-end gap-3 pt-6 border-t border-gray-200 mt-6">

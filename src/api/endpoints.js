@@ -18,3 +18,12 @@ export const MENTORING_API = {
   organizationList: '/user/v1/organization/list',
   triggerPeriodicViewRefresh: '/mentoring/v1/admin/triggerPeriodicViewRefresh',
 }
+
+export const TENANT_API = {
+  list: '/user/v1/tenant/list',
+  read: code => `/user/v1/tenant/read/${code}`,
+  update: '/user/v1/tenant/update',
+  updateByCode: tenantCode => `/user/v1/tenant/update/${tenantCode}`,
+  addDomain: tenantCode => `/user/v1/tenant/addDomain/${tenantCode}`,
+  removeDomain: tenantCode => `/user/v1/tenant/removeDomain/${tenantCode}`,
+}
