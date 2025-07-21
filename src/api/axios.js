@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 // Create an Axios instance with default configurations
 const axiosInstance = axios.create({
-  baseURL: 'https://dev.elevate-apis.shikshalokam.org/', // Use base URL from env file or fallback
+  baseURL: import.meta.env.VITE_BASE_URL, // Use base URL from env file
   timeout: 10000, // Optional: Set timeout for all requests
   headers: {
     'Content-Type': 'application/json',
@@ -15,27 +15,28 @@ const axiosInstance = axios.create({
 // Request interceptor to add authorization token
 axiosInstance.interceptors.request.use(
   config => {
-    // Dynamically retrieve the token each time a request is made
-    const token = localStorage.getItem('access_token')
+    // Always set Content-Type
+    config.headers['Content-Type'] = 'application/json';
 
+    // Always set x-auth-token if available
+    const token = localStorage.getItem('access_token');
     if (token) {
-      // Set the token for each request in the Authorization header
       config.headers['x-auth-token'] = token;
-
     }
-    const orgHeader = localStorage.getItem('custom_org')
 
+    // Always set x-tenant
+    config.headers['x-tenant'] = 'mentoring';
+
+    // Optionally: set organization-id if available
+    const orgHeader = localStorage.getItem('custom_org');
     if (orgHeader) {
-      // Set the token for each request in the Authorization header
-      config.headers['organization-id'] = orgHeader
+      config.headers['organization-id'] = orgHeader;
     }
 
-    return config
+    return config;
   },
-  error => {
-    return Promise.reject(error)
-  },
-)
+  error => Promise.reject(error)
+);
 
 // Response interceptor to handle errors globally
 axiosInstance.interceptors.response.use(

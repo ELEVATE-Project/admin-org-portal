@@ -7,6 +7,8 @@ import UserListPage from './pages/AllUsersPage'
 import EntityManagementPage from './pages/EntityManagementPage'
 import FormsManagementPage from './pages/FormsManagementPage'
 import NotificationTemplateManagement from './pages/NotificationTemplateManagement'
+import TenantsPage from './pages/Tenant/TenantsPage'
+import TenantDetail from '@/pages/Tenant/TenantDetail'
 
 const AppRouter = () => {
   return (
@@ -20,6 +22,8 @@ const AppRouter = () => {
         <Route path="/entity" element={<EntityManagementPage />} />
         <Route path="/forms" element={<FormsManagementPage />} />
         <Route path="/notification-templates" element={<NotificationTemplateManagement />} />
+        <Route path="/tenants" element={<TenantsPage />} />
+        <Route path="/tenants/:code" element={<TenantDetail />} />
         {/* Add more routes as needed */}
       </Routes>
     </Router>
