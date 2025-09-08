@@ -27,3 +27,10 @@ export const TENANT_API = {
   addDomain: tenantCode => `/user/v1/tenant/addDomain/${tenantCode}`,
   removeDomain: tenantCode => `/user/v1/tenant/removeDomain/${tenantCode}`,
 }
+
+export const ORGANIZATION_API = {
+  list: '/user/v1/organization/list',
+  read: '/user/v1/organization/read',
+  update: organizationId => `/user/v1/organization/update/${organizationId}`,
+  create: '/user/v1/organization/create',
+}

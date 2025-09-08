@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '@/components/Layout'
 import { getAllTenants } from '@/api/tenantApi'
-import { getOrganizationsByTenant, readOrganization } from '@/api/organizationApi'
+import { getOrganizationsByTenant } from '@/api/organizationApi'
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
@@ -45,14 +45,8 @@ const OrganizationsListPage = () => {
     }
   }
 
-  const handleViewOrganization = async (orgId) => {
+  const handleViewOrganization = (orgId) => {
     navigate(`/organizations/${orgId}`)
-    try {
-      const res = await readOrganization(orgId)
-      console.log("Organization Details:", res.result)
-    } catch (err) {
-      console.error("❌ Failed to fetch organization details:", err)
-    }
   }
 
   useEffect(() => {

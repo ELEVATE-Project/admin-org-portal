@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Label } from '@/components/ui/label'
+import { toast } from '@/hooks/use-toast'
 
 const AuthForms = () => {
   const [isLogin, setIsLogin] = useState(true)
@@ -68,11 +69,13 @@ const AuthForms = () => {
         const profileDetails = await getProfile() // Use the getProfile function
         localStorage.setItem('user', JSON.stringify(profileDetails.data.result))
       } catch (profileError) {
-        // If profile fetch fails, use the user data from login response
-        console.warn('Profile fetch failed, using login user data:', profileError.message)
         if (user) {
           localStorage.setItem('user', JSON.stringify(user))
         }
+        toast({
+          title: 'Using login data',
+          description: 'Could not load profile. Proceeding with login response.',
+        })
       }
 
       setTimeout(() => navigate('/dashboard'), 500)
