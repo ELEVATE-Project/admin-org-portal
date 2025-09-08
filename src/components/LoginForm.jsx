@@ -64,9 +64,16 @@ const AuthForms = () => {
       localStorage.setItem('access_token', access_token)
       localStorage.setItem('refresh_token', refresh_token)
 
-      const profileDetails = await getProfile() // Use the getProfile function
-
-      localStorage.setItem('user', JSON.stringify(profileDetails.data.result))
+      try {
+        const profileDetails = await getProfile() // Use the getProfile function
+        localStorage.setItem('user', JSON.stringify(profileDetails.data.result))
+      } catch (profileError) {
+        // If profile fetch fails, use the user data from login response
+        console.warn('Profile fetch failed, using login user data:', profileError.message)
+        if (user) {
+          localStorage.setItem('user', JSON.stringify(user))
+        }
+      }
 
       setTimeout(() => navigate('/dashboard'), 500)
     } catch (error) {

@@ -25,8 +25,13 @@ const DynamicForm = ({ fields, formData, errors, onChange, mode }) => {
         placeholder={field.placeHolder}
         value={value}
         onChange={e => onChange(field.name, e.target.value)}
-        className="focus:outline-none focus:ring-2 focus:ring-blue-500"
-        disabled={field.name === 'code' && mode === 'edit'}
+        className={`focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+          field.readOnly || (field.name === 'code' && mode === 'edit')
+            ? 'bg-gray-100 cursor-not-allowed'
+            : ''
+        }`}
+        disabled={field.readOnly || (field.name === 'code' && mode === 'edit')}
+        readOnly={field.readOnly || (field.name === 'code' && mode === 'edit')}
       />
       {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
     </div>
@@ -40,8 +45,31 @@ const DynamicForm = ({ fields, formData, errors, onChange, mode }) => {
         placeholder={field.placeHolder}
         value={value}
         onChange={e => onChange(field.name, e.target.value)}
-        className="w-full border rounded px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className={`w-full border rounded px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+          field.readOnly ? 'bg-gray-100 cursor-not-allowed' : ''
+        }`}
         rows={3}
+        disabled={field.readOnly}
+        readOnly={field.readOnly}
+      />
+      {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
+    </div>
+  )
+
+  const renderNumberField = (field, value, error) => (
+    <div key={field.name} className="space-y-1 w-full">
+      <Label htmlFor={field.name}>{field.label}</Label>
+      <Input
+        id={field.name}
+        type="number"
+        placeholder={field.placeHolder}
+        value={value}
+        onChange={e => onChange(field.name, e.target.value)}
+        className={`focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+          field.readOnly ? 'bg-gray-100 cursor-not-allowed' : ''
+        }`}
+        disabled={field.readOnly}
+        readOnly={field.readOnly}
       />
       {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
     </div>
@@ -58,6 +86,8 @@ const DynamicForm = ({ fields, formData, errors, onChange, mode }) => {
         return renderTextField(field, value, error)
       case 'textarea':
         return renderTextareaField(field, value, error)
+      case 'number':
+        return renderNumberField(field, value, error)
       case 'color':
         return (
           <div key={name} className={commonClasses}>
@@ -68,7 +98,11 @@ const DynamicForm = ({ fields, formData, errors, onChange, mode }) => {
                 type="color"
                 value={value || '#000000'}
                 onChange={e => onChange(name, e.target.value)}
-                className="w-16 h-10 p-1 border rounded cursor-pointer"
+                className={`w-16 h-10 p-1 border rounded cursor-pointer ${
+                  field.readOnly ? 'cursor-not-allowed' : ''
+                }`}
+                disabled={field.readOnly}
+                readOnly={field.readOnly}
               />
               <span className="text-sm font-mono text-gray-600">
                 {value || '#000000'}
@@ -83,8 +117,14 @@ const DynamicForm = ({ fields, formData, errors, onChange, mode }) => {
         return (
           <div key={name} className={commonClasses}>
             <Label htmlFor={name}>{label}</Label>
-            <Select onValueChange={val => onChange(name, val)} value={value}>
-              <SelectTrigger className="w-full">
+            <Select 
+              onValueChange={val => onChange(name, val)} 
+              value={value}
+              disabled={field.readOnly}
+            >
+              <SelectTrigger className={`w-full ${
+                field.readOnly ? 'bg-gray-100 cursor-not-allowed' : ''
+              }`}>
                 <SelectValue placeholder={placeHolder} />
               </SelectTrigger>
               <SelectContent>
@@ -115,7 +155,9 @@ const DynamicForm = ({ fields, formData, errors, onChange, mode }) => {
                     type="button"
                     size="sm"
                     variant={selected ? 'default' : 'outline'}
+                    disabled={field.readOnly}
                     onClick={() => {
+                      if (field.readOnly) return
                       let newValues = Array.isArray(value) ? [...value] : []
                       if (selected) {
                         newValues = newValues.filter(
@@ -126,6 +168,7 @@ const DynamicForm = ({ fields, formData, errors, onChange, mode }) => {
                       }
                       onChange(name, newValues)
                     }}
+                    className={field.readOnly ? 'cursor-not-allowed opacity-60' : ''}
                   >
                     {opt.label || opt}
                   </Button>
@@ -142,10 +185,14 @@ const DynamicForm = ({ fields, formData, errors, onChange, mode }) => {
     }
   }
 
-  const primaryColorField = fields.find(f => f.name === 'theme.primaryColor')
-  const secondaryColorField = fields.find(f => f.name === 'theme.secondaryColor')
+  // Find theming fields for both organization and tenant forms
+  const primaryColorField =
+    fields.find(f => f.name === 'theming.primaryColor' || f.name === 'theme.primaryColor')
+  const secondaryColorField =
+    fields.find(f => f.name === 'theming.secondaryColor' || f.name === 'theme.secondaryColor')
   const otherFields = fields.filter(
-    f => f.name !== 'theme.primaryColor' && f.name !== 'theme.secondaryColor'
+    f => f.name !== 'theming.primaryColor' && f.name !== 'theme.primaryColor' &&
+         f.name !== 'theming.secondaryColor' && f.name !== 'theme.secondaryColor'
   )
 
   return (

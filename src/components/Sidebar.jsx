@@ -23,102 +23,129 @@ const Sidebar = ({ isCollapsed = false }) => {
     navigate('/login')
   }
 
-  const navigationItems = [
-    {
-      label: 'Home',
-      icon: Home,
-      path: '/dashboard',
-    },
-    {
-      label: 'My Profile',
-      icon: UserCircle,
-      path: '/profile',
-    },
-    {
-      label: 'All Users',
-      icon: Users,
-      path: '/users',
-    },
-     {
-    label: 'Tenants',
-    icon: Users,
-    path: '/tenants',
-  },
-    {
-      label: 'Entity Types',
-      icon: LayoutList,
-      path: '/entity',
-    },
+  const isPathActive = path => location.pathname === path
 
-    {
-      label: 'Forms',
-      icon: FileText,
-      path: '/forms',
-    },
-    {
-      label: 'Notification Templates',
-      icon: Bell,
-      path: '/notification-templates',
-    },
-    {
-      label: 'Settings',
-      icon: Settings,
-      path: '/settings',
-    },
-  ]
-
-  const NavItem = ({ icon: Icon, label, path, onClick }) => {
-    const isActive = location.pathname === path
-
-    return (
-      <button
-        onClick={onClick}
-        className={`
-          w-full flex items-center gap-2 p-2 rounded-lg transition-all duration-200
-          ${
-            isActive
-              ? 'bg-primary-50 text-primary-900 font-medium'
-              : 'text-gray-700 hover:bg-gray-100'
-          }
-          ${isCollapsed ? 'justify-center px-2' : 'justify-start px-3'}
-        `}>
-        <Icon
-          className={`flex-shrink-0 ${isActive ? 'text-primary-600' : 'text-gray-500'}`}
-          size={20}
-        />
-        {!isCollapsed && <span className="truncate">{label}</span>}
-        {isActive && !isCollapsed && (
-          <ChevronRight className="ml-auto flex-shrink-0 text-primary-600" size={16} />
-        )}
-      </button>
-    )
-  }
+  const NavItem = ({ icon: Icon, label, path, onClick, active }) => (
+    <button
+      onClick={onClick}
+      className={`
+        w-full flex items-center gap-2 p-2 rounded-lg transition-all duration-200
+        ${active ? 'bg-primary-50 text-primary-900 font-medium' : 'text-gray-700 hover:bg-gray-100'}
+        ${isCollapsed ? 'justify-center px-2' : 'justify-start px-3'}
+      `}
+    >
+      <Icon className={`${active ? 'text-primary-600' : 'text-gray-500'}`} size={20} />
+      {!isCollapsed && <span className="truncate">{label}</span>}
+      {active && !isCollapsed && (
+        <ChevronRight className="ml-auto text-primary-600" size={16} />
+      )}
+    </button>
+  )
 
   return (
     <div
       className={`
-      flex flex-col h-full w-full bg-white
-      ${isCollapsed ? 'items-center' : 'items-stretch'}
-      ${isCollapsed ? 'px-1' : 'px-2'}
-    `}>
+        flex flex-col h-full w-full bg-white
+        ${isCollapsed ? 'items-center' : 'items-stretch'}
+        ${isCollapsed ? 'px-1' : 'px-2'}
+      `}
+    >
       <nav className="flex-1 w-full space-y-1 mt-4">
-        {navigationItems.map(item => (
-          <NavItem key={item.path} {...item} onClick={() => navigate(item.path)} />
-        ))}
+        <NavItem
+          icon={Home}
+          label="Home"
+          path="/dashboard"
+          active={isPathActive('/dashboard')}
+          onClick={() => navigate('/dashboard')}
+        />
+        <NavItem
+          icon={UserCircle}
+          label="My Profile"
+          path="/profile"
+          active={isPathActive('/profile')}
+          onClick={() => navigate('/profile')}
+        />
+        <NavItem
+          icon={Users}
+          label="All Users"
+          path="/users"
+          active={isPathActive('/users')}
+          onClick={() => navigate('/users')}
+        />
+
+        {/* Tenants (Parent) */}
+        <NavItem
+          icon={Users}
+          label="Tenants"
+          path="/tenants"
+          active={isPathActive('/tenants')}
+          onClick={() => navigate('/tenants')}
+        />
+
+        {/* Organizations (Child of Tenants) */}
+        {!isCollapsed && (
+          <button
+            onClick={() => navigate('/tenants/organizations')}
+            className={`
+              w-full flex items-center gap-2 py-1.5 px-6 text-sm rounded-lg transition-colors duration-200
+              ${
+                isPathActive('/tenants/organizations')
+                  ? 'bg-primary-50 text-primary-900 font-medium'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }
+            `}
+          >
+            <Users
+              size={16}
+              className={`flex-shrink-0 ${
+                isPathActive('/tenant-organizations') ? 'text-primary-600' : 'text-gray-500'
+              }`}
+            />
+            <span className="truncate">Organizations</span>
+            {isPathActive('/tenant-organizations') && (
+              <ChevronRight size={14} className="ml-auto text-primary-600" />
+            )}
+          </button>
+        )}
+
+        {/* Remaining nav items */}
+        <NavItem
+          icon={LayoutList}
+          label="Entity Types"
+          path="/entity"
+          active={isPathActive('/entity')}
+          onClick={() => navigate('/entity')}
+        />
+        <NavItem
+          icon={FileText}
+          label="Forms"
+          path="/forms"
+          active={isPathActive('/forms')}
+          onClick={() => navigate('/forms')}
+        />
+        <NavItem
+          icon={Bell}
+          label="Notification Templates"
+          path="/notification-templates"
+          active={isPathActive('/notification-templates')}
+          onClick={() => navigate('/notification-templates')}
+        />
+        <NavItem
+          icon={Settings}
+          label="Settings"
+          path="/settings"
+          active={isPathActive('/settings')}
+          onClick={() => navigate('/settings')}
+        />
       </nav>
 
-      <div
-        className={`
-        mt-auto mb-6 w-full space-y-1
-        ${isCollapsed ? 'px-1' : 'px-2'}
-      `}>
+      <div className={`mt-auto mb-6 w-full ${isCollapsed ? 'px-1' : 'px-2'}`}>
         <button
           onClick={handleLogout}
-          className={`
-            w-full flex items-center gap-2 p-2 rounded-lg
-            text-red-600 hover:bg-red-50 transition-colors
-            ${isCollapsed ? 'justify-center' : 'justify-start'}
-          `}>
+          className={`w-full flex items-center gap-2 p-2 rounded-lg text-red-600 hover:bg-red-50 transition-colors ${
+            isCollapsed ? 'justify-center' : 'justify-start'
+          }`}
+        >
           <LogOut size={20} />
           {!isCollapsed && <span>Logout</span>}
         </button>

@@ -95,7 +95,9 @@ const TenantCreateModal = ({ open, setOpen, onAdd, initialData = {}, mode = 'cre
     if (mode === 'edit') {
       setAddLoading(true)
       try {
-        await addTenantDomain(initialData.code, [newDomain])
+        // Use the real tenant code for API calls
+        const tenantCode = initialData._realCode || initialData.code
+        await addTenantDomain(tenantCode, [newDomain])
         setDomains(prev => [...prev, newDomain])
         setDomainInput('')
         toast && toast({ title: 'Domain added', description: `${newDomain} added successfully`, variant: 'success' })
@@ -114,7 +116,9 @@ const TenantCreateModal = ({ open, setOpen, onAdd, initialData = {}, mode = 'cre
     if (mode === 'edit') {
       setRemoveLoadingDomain(domain)
       try {
-        await removeTenantDomain(initialData.code, [domain])
+        // Use the real tenant code for API calls
+        const tenantCode = initialData._realCode || initialData.code
+        await removeTenantDomain(tenantCode, [domain])
         setDomains(prev => prev.filter(d => d !== domain))
         toast && toast({ title: 'Domain removed', description: `${domain} removed successfully`, variant: 'success' })
       } catch (err) {
@@ -155,7 +159,9 @@ const TenantCreateModal = ({ open, setOpen, onAdd, initialData = {}, mode = 'cre
       }
 
       if (mode === 'edit') {
-        await updateTenant(initialData.code, payload)
+        // Use the real tenant code for API calls
+        const tenantCode = initialData._realCode || initialData.code
+        await updateTenant(tenantCode, payload)
       } else {
         await createOrUpdateTenant(payload)
       }
@@ -169,7 +175,11 @@ const TenantCreateModal = ({ open, setOpen, onAdd, initialData = {}, mode = 'cre
       setLoading(false)
     }
   }
-
+// Filter out unwanted groups before rendering
+const shouldRenderGroup = (group) => {
+  if (group.label === 'Meta') return false
+  return true
+}
   const renderGroupSection = (group) => {
     const domainField = group.fields.find(f => f.name === 'domain')
 
@@ -247,49 +257,51 @@ const TenantCreateModal = ({ open, setOpen, onAdd, initialData = {}, mode = 'cre
       </Dialog>
     )
   }
+  
+return (
+  <Dialog open={open} onOpenChange={setOpen}>
+    <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl p-6 shadow-md">
+      <DialogHeader>
+        <DialogTitle className="text-2xl font-semibold text-gray-800">
+          {mode === 'edit' ? 'Edit Tenant' : 'Create New Tenant'}
+        </DialogTitle>
+      </DialogHeader>
 
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl p-6 shadow-md">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-semibold text-gray-800">
-            {mode === 'edit' ? 'Edit Tenant' : 'Create New Tenant'}
-          </DialogTitle>
-        </DialogHeader>
-
-        <div className="space-y-6 mt-4">
-          {formFields.map(field =>
+      <div className="space-y-6 mt-4">
+        {formFields
+          .filter(field => field.type !== 'group' || shouldRenderGroup(field))
+          .map(field =>
             field.type === 'group' ? renderGroupSection(field) : null
           )}
-          {submitError && (
-            <div className="text-red-600 text-sm mb-2">{submitError}</div>
-          )}
+        {submitError && (
+          <div className="text-red-600 text-sm mb-2">{submitError}</div>
+        )}
 
-          <div className="flex justify-end gap-3 pt-6 border-t border-gray-200 mt-6">
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => setOpen(false)}
-              disabled={loading}
-              className="text-gray-600 hover:text-gray-900"
-            >
-              Cancel
-            </Button>
-            <Button onClick={handleSubmit} disabled={loading}>
-              {loading ? (
-                <div className="flex items-center gap-2">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  {mode === 'edit' ? 'Updating...' : 'Creating...'}
-                </div>
-              ) : (
-                mode === 'edit' ? 'Update' : 'Create'
-              )}
-            </Button>
-          </div>
+        <div className="flex justify-end gap-3 pt-6 border-t border-gray-200 mt-6">
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => setOpen(false)}
+            disabled={loading}
+            className="text-gray-600 hover:text-gray-900"
+          >
+            Cancel
+          </Button>
+          <Button onClick={handleSubmit} disabled={loading}>
+            {loading ? (
+              <div className="flex items-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                {mode === 'edit' ? 'Updating...' : 'Creating...'}
+              </div>
+            ) : (
+              mode === 'edit' ? 'Update' : 'Create'
+            )}
+          </Button>
         </div>
-      </DialogContent>
-    </Dialog>
-  )
+      </div>
+    </DialogContent>
+  </Dialog>
+)
 }
 
 export default TenantCreateModal

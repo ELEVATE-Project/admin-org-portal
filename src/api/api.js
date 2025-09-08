@@ -7,9 +7,22 @@ import { USER_API } from './endpoints'
  * @returns {Promise} API response
  */
 export const login = async formData => {
-  const response = await axiosInstance.post(USER_API.login, formData)
+  // Convert form data to URLSearchParams for form-urlencoded
+  const urlParams = new URLSearchParams()
+  urlParams.append('identifier', formData.identifier || formData.identifier)
+  urlParams.append('password', formData.password)
+
+  // Create a custom config for this request to override the default JSON content type
+  const config = {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+      
+    }
+  }
+
+  const response = await axiosInstance.post(USER_API.login, urlParams, config)
   const { access_token, user, refresh_token } = response.data.result
-  return { access_token, user }
+  return { access_token, user, refresh_token }
 }
 /**
  * User login
