@@ -23,7 +23,8 @@ const Sidebar = ({ isCollapsed = false }) => {
     navigate('/login')
   }
 
-  const isPathActive = path => location.pathname === path
+ const isPathActive = path =>
+  location.pathname === path || location.pathname.startsWith(path + '/')
 
   const NavItem = ({ icon: Icon, label, path, onClick, active }) => (
     <button
