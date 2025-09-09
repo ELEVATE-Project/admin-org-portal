@@ -98,11 +98,11 @@ const Sidebar = ({ isCollapsed = false }) => {
             <Users
               size={16}
               className={`flex-shrink-0 ${
-                isPathActive('/tenant-organizations') ? 'text-primary-600' : 'text-gray-500'
+                isPathActive('/tenants/organizations') ? 'text-primary-600' : 'text-gray-500'
               }`}
             />
             <span className="truncate">Organizations</span>
-            {isPathActive('/tenant-organizations') && (
+            {isPathActive('/tenants/organizations') && (
               <ChevronRight size={14} className="ml-auto text-primary-600" />
             )}
           </button>

@@ -9,7 +9,7 @@ import { USER_API } from './endpoints'
 export const login = async formData => {
   // Convert form data to URLSearchParams for form-urlencoded
   const urlParams = new URLSearchParams()
-  urlParams.append('identifier', formData.identifier || formData.identifier)
+  urlParams.append('identifier', formData.identifier || formData.email)
   urlParams.append('password', formData.password)
 
   // Create a custom config for this request to override the default JSON content type

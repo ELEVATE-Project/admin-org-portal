@@ -35,15 +35,19 @@ const OrganizationsListPage = () => {
     fetchTenantsAndSelectFirst()
   }, [])
 
-  const fetchOrganizations = async (tenantCode, page = 1) => {
-    try {
-      const res = await getOrganizationsByTenant({ tenantCode, page, limit: rowsPerPage })
-      setOrganizations(res.result || [])
-      setTotalPages(Math.ceil((res.meta?.totalCount || 0) / rowsPerPage))
-    } catch (err) {
-      console.error('❌ Failed to fetch orgs:', err)
-    }
-  }
+   const fetchOrganizations = async (tenantCode, page = 1) => {
+     try {
+       const res = await getOrganizationsByTenant({ tenantCode, page, limit: rowsPerPage })
+       const list = Array.isArray(res?.result) ? res.result : []
+       const totalCount = Number(res?.meta?.totalCount) || 0
+       setOrganizations(list)
+       setTotalPages(Math.max(1, Math.ceil(totalCount / rowsPerPage)))
+     } catch (err) {
+       console.error('❌ Failed to fetch orgs:', err)
+       setOrganizations([])
+       setTotalPages(1)
+     }
+   }
 
   const handleViewOrganization = (orgId) => {
     navigate(`/organizations/${orgId}`)
@@ -151,8 +155,8 @@ const OrganizationsListPage = () => {
             <div className="flex justify-center mt-4 space-x-2">
               <Button
                 variant="outline"
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage((prev) => prev - 1)}
+                 disabled={currentPage <= 1}
+                 onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
               >
                 Prev
               </Button>
@@ -161,8 +165,8 @@ const OrganizationsListPage = () => {
               </span>
               <Button
                 variant="outline"
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage((prev) => prev + 1)}
+                disabled={currentPage >= totalPages}
+                onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
               >
                 Next
               </Button>

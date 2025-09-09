@@ -16,11 +16,11 @@ const TenantDetail = () => {
     try {
       const { result } = await getTenantByCode(code)
       if (result) {
-        if (result.code !== code) {
-          setTenant(prev => ({
-            ...prev,
-            _apiData: result
-          }))
+         if (result.code !== code) {
+           setTenant(prev => ({
+             ...(prev || {}),
+             _apiData: result
+           }))
         } else {
           setTenant(result)
         }
@@ -44,9 +44,10 @@ const TenantDetail = () => {
     )
   }
 
-  const theming = tenant.theming || {};
-  const primaryColor = theming.primaryColor || '#1E40AF'
-  const secondaryColor = theming.secondaryColor || null
+  const theming = tenant.theming || {}
+   const primaryColor = theming.primaryColor || null
+   const secondaryColor = theming.secondaryColor || null
+   const hasTheming = Boolean(primaryColor || secondaryColor)
 return (
     <Layout>
       <div className="max-w-3xl mx-auto p-6 bg-gray-50 shadow-md rounded-2xl mt-4 space-y-6">
@@ -130,7 +131,7 @@ return (
         </div>
 
         {/* Theming */}
-        {(primaryColor || secondaryColor) && (
+        {hasTheming && (
           <div className="bg-white rounded-2xl border p-5 shadow-sm">
             <h2 className="text-lg font-semibold flex items-center gap-2 border-b pb-1 mb-2">
               <Palette className="w-5 h-5 text-gray-500" /> Theming

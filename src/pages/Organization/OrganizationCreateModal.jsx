@@ -90,9 +90,9 @@ const OrganizationCreateModal = ({
         errs[field.name] =
           field.errorMessage?.required || 'This field is required'
       }
-      if (field.validators?.pattern) {
+       if (field.validators?.pattern && value !== '' && value != null) {
         const regex = new RegExp(field.validators.pattern)
-        if (!regex.test(value)) {
+        if (!regex.test(String(value))) {
           errs[field.name] =
             field.errorMessage?.pattern || 'Invalid format'
         }
@@ -139,25 +139,27 @@ const OrganizationCreateModal = ({
               .filter(Boolean)
           : []
 
-      // Prepare theming object
-      const theming = {
-        primaryColor: formData['theming.primaryColor'],
-        ...(formData['theming.secondaryColor'] && {
-          secondaryColor: formData['theming.secondaryColor'],
-        }),
+      // Prepare theming object (only include non-empty values)
+      const theming = {}
+      if (formData['theming.primaryColor']?.trim()) {
+        theming.primaryColor = formData['theming.primaryColor'].trim()
       }
+      if (formData['theming.secondaryColor']?.trim()) {
+        theming.secondaryColor = formData['theming.secondaryColor'].trim()
+}
+
 
       let payload = {}
 
       if (mode === 'edit') {
         payload = {
-          name: formData.name,
-          description: formData.description,
-          theming,
-          ...(processedRelatedOrgs.length > 0 && {
-            related_orgs: processedRelatedOrgs,
-          }),
-        }
+        name: formData.name,
+        description: formData.description,
+        ...(Object.keys(theming).length > 0 && { theming }),
+        ...(processedRelatedOrgs.length > 0 && {
+          related_orgs: processedRelatedOrgs,
+        }),
+      }
       } else {
         // Create mode
         payload = {
@@ -167,7 +169,7 @@ const OrganizationCreateModal = ({
           param: formData.param,
           tenant_code: formData.tenant_code,
           ...(processedDomains.length > 0 && { domains: processedDomains }),
-          theming,
+          ...(Object.keys(theming).length > 0 && { theming }),
         }
       }
 

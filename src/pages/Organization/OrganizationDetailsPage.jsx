@@ -17,10 +17,11 @@ const OrganizationDetailsPage = () => {
 const fetchOrganization = async () => {
     setLoading(true)
     try {
-      const { result } = await readOrganization(id)
-      if (result) {
-        setOrganization(result)
-      }
+       const data = await readOrganization(id)
+       const org = data?.result ?? data
+       if (org) {
+         setOrganization(org)
+       }
     } catch (error) {
       console.error('❌ Failed to load organization:', error)
     } finally {
