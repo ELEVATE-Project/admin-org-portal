@@ -1,0 +1,57 @@
+{
+  "type": "form",
+  "subType": "organizationForm",
+  "data": [
+    {
+      "type": "group",
+      "label": "Basic Info",
+      "fields": [
+        { "name": "name", "label": "Organization Name", "type": "text", "placeHolder": "Ex. MentorEdu", "validators": { "required": true } },
+        { "name": "code", "label": "Organization Code", "type": "text", "placeHolder": "Ex. mentor_edu_001", "validators": { "required": true }, "showOnMode": ["create"] },
+        { "name": "description", "label": "Description", "type": "textarea", "placeHolder": "Enter a short description", "colSpan": 2 },
+        { "name": "param", "label": "Parameter", "type": "text", "placeHolder": "Ex. test_param", "showOnMode": ["create"] },
+        { "name": "tenant_code", "label": "Tenant Code", "type": "text", "placeHolder": "Ex. siddhi", "validators": { "required": true }, "showOnMode": ["create"], "readOnly": true }
+      ]
+    },
+     {
+      "type": "group",
+      "label": "Theming",
+      "fields": [
+        {
+          "name": "theming.primaryColor",
+          "label": "Primary Color",
+          "type": "color",
+          "defaultValue": "#1E40AF"
+        },
+        {
+          "name": "theming.secondaryColor",
+          "label": "Secondary Color",
+          "type": "color",
+          "defaultValue": "#F59E0B",
+          "accordion": true
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "label": "Domains",
+      "fields": [
+        { "name": "domains", "label": "Domains (comma separated)", "type": "text", "placeHolder": "Ex. example.com, test.org", "showOnMode": ["create"] }
+      ]
+    },
+    {
+      "type": "group",
+      "label": "Related Organizations",
+      "fields": [
+        { "name": "related_orgs", "label": "Related Organizations (comma separated IDs)", "type": "text", "placeHolder": "Ex. 3, 4, 5", "showOnMode": ["edit"] }
+      ]
+    },
+    {
+      "type": "group",
+      "label": "Meta",
+      "fields": [
+        { "name": "meta.tags", "label": "Tags (comma separated)", "type": "text", "placeHolder": "e.g. education, ngo" }
+      ]
+    }
+  ]
+}

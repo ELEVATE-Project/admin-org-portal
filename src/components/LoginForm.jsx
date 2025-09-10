@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Label } from '@/components/ui/label'
+import { toast } from '@/hooks/use-toast'
 
 const AuthForms = () => {
   const [isLogin, setIsLogin] = useState(true)
@@ -64,9 +65,18 @@ const AuthForms = () => {
       localStorage.setItem('access_token', access_token)
       localStorage.setItem('refresh_token', refresh_token)
 
-      const profileDetails = await getProfile() // Use the getProfile function
-
-      localStorage.setItem('user', JSON.stringify(profileDetails.data.result))
+      try {
+        const profileDetails = await getProfile() // Use the getProfile function
+        localStorage.setItem('user', JSON.stringify(profileDetails.data.result))
+      } catch (profileError) {
+        if (user) {
+          localStorage.setItem('user', JSON.stringify(user))
+        }
+        toast({
+          title: 'Using login data',
+          description: 'Could not load profile. Proceeding with login response.',
+        })
+      }
 
       setTimeout(() => navigate('/dashboard'), 500)
     } catch (error) {

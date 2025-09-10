@@ -1,7 +1,7 @@
 // src/api/apiEndpoints.js
 
 export const USER_API = {
-  login: '/user/v1/account/login',
+  login: '/user/v1/admin/login',
   logout: '/user/v1/account/logout',
   createUser: '/user/v1/admin/create',
   deleteUser: userId => `/user/v1/admin/deleteUser/${userId}`,
@@ -26,4 +26,11 @@ export const TENANT_API = {
   updateByCode: tenantCode => `/user/v1/tenant/update/${tenantCode}`,
   addDomain: tenantCode => `/user/v1/tenant/addDomain/${tenantCode}`,
   removeDomain: tenantCode => `/user/v1/tenant/removeDomain/${tenantCode}`,
+}
+
+export const ORGANIZATION_API = {
+  list: '/user/v1/organization/list',
+  read: '/user/v1/organization/read',
+  update: organizationId => `/user/v1/organization/update/${organizationId}`,
+  create: '/user/v1/organization/create',
 }

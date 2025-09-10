@@ -15,13 +15,17 @@ const axiosInstance = axios.create({
 // Request interceptor to add authorization token
 axiosInstance.interceptors.request.use(
   config => {
-    // Always set Content-Type
-    config.headers['Content-Type'] = 'application/json';
+    // Don't override Content-Type if it's already set (for form-urlencoded login)
+    if (!config.headers['Content-Type']) {
+      config.headers['Content-Type'] = 'application/json';
+    }
 
     // Always set x-auth-token if available
     const token = localStorage.getItem('access_token');
     if (token) {
       config.headers['x-auth-token'] = token;
+      // Also set Authorization header as backup
+      config.headers['Authorization'] = `Bearer ${token}`;
     }
 
     // Always set x-tenant
