@@ -1,0 +1,146 @@
+{
+  "type": "form",
+  "subType": "roleForm",
+  "data": [
+    {
+      "type": "group",
+      "label": "Basic Info",
+      "fields": [
+        {
+          "name": "title",
+          "label": "Role Title",
+          "type": "text",
+          "placeHolder": "e.g., session_manager",
+          "validators": { "required": true }
+        },
+        {
+          "name": "label",
+          "label": "Role Label",
+          "type": "text",
+          "placeHolder": "e.g., Session Manager",
+          "validators": { "required": true }
+        },
+        {
+          "name": "user_type",
+          "label": "User Type",
+          "type": "select",
+          "options": [
+            { "value": 0, "label": "0 (User)" },
+            { "value": 1, "label": "1 (Admin)" }
+          ],
+          "defaultValue": 0
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "select",
+          "options": [
+            { "value": "ACTIVE", "label": "Active" },
+            { "value": "INACTIVE", "label": "Inactive" }
+          ],
+          "defaultValue": "ACTIVE"
+        },
+        {
+          "name": "visibility",
+          "label": "Visibility",
+          "type": "select",
+          "options": [
+            { "value": "PUBLIC", "label": "Public" },
+            { "value": "PRIVATE", "label": "Private" }
+          ],
+          "defaultValue": "PUBLIC"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "label": "Entity Types",
+      "fields": [
+        {
+          "name": "entityTypeId",
+          "label": "Entity Type ID",
+          "type": "text",
+          "placeHolder": "e.g., 5f32d8228e0dc8312404056e"
+        },
+        {
+          "name": "entityType",
+          "label": "Entity Type",
+          "type": "text",
+          "placeHolder": "e.g., state"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "label": "Translations",
+      "fields": [
+        {
+          "name": "translations.hi.title",
+          "label": "Hindi Title",
+          "type": "text",
+          "placeHolder": "हिंदी शीर्षक"
+        },
+        {
+          "name": "translations.kn.title",
+          "label": "Kannada Title",
+          "type": "text",
+          "placeHolder": "ಕನ್ನಡ ಶೀರ್ಷಿಕೆ"
+        },
+        {
+          "name": "translations.te.title",
+          "label": "Telugu Title",
+          "type": "text",
+          "placeHolder": "తెలుగు శీర్షిక"
+        },
+        {
+          "name": "translations.bn.title",
+          "label": "Bengali Title",
+          "type": "text",
+          "placeHolder": "বাংলা শিরোনাম"
+        },
+        {
+          "name": "translations.gu.title",
+          "label": "Gujarati Title",
+          "type": "text",
+          "placeHolder": "ગુજરાતી શીર્ષક"
+        },
+        {
+          "name": "translations.ta.title",
+          "label": "Tamil Title",
+          "type": "text",
+          "placeHolder": "தமிழ் தலைப்பு"
+        },
+        {
+          "name": "translations.pa.title",
+          "label": "Punjabi Title",
+          "type": "text",
+          "placeHolder": "ਪੰਜਾਬੀ ਸਿਰਲੇਖ"
+        },
+        {
+          "name": "translations.ml.title",
+          "label": "Malayalam Title",
+          "type": "text",
+          "placeHolder": "മലയാളം ശീർഷകം"
+        },
+        {
+          "name": "translations.mr.title",
+          "label": "Marathi Title",
+          "type": "text",
+          "placeHolder": "मराठी शीर्षक"
+        },
+        {
+          "name": "translations.ur.title",
+          "label": "Urdu Title",
+          "type": "text",
+          "placeHolder": "اردو عنوان"
+        },
+        {
+          "name": "translations.or.title",
+          "label": "Odia Title",
+          "type": "text",
+          "placeHolder": "ଓଡ଼ିଆ ଶୀର୍ଷକ"
+        }
+      ]
+    }
+  ]
+}

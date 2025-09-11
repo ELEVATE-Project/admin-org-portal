@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, useLocation } from 'react-router-dom'
+import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import { readOrganization } from '@/api/organizationApi'
 import Layout from '@/components/Layout'
 import OrganizationCreateModal from './OrganizationCreateModal'
 import { Button } from '@/components/ui/button'
-import { User, BadgeCheck, Palette, FileText } from 'lucide-react'
+import { User, BadgeCheck, Palette, FileText, Users, Settings, ArrowRight } from 'lucide-react'
 import { Loader2 } from 'lucide-react'
 
 const OrganizationDetailsPage = () => {
   const { id } = useParams()
   const location = useLocation()
+  const navigate = useNavigate()
   const [organization, setOrganization] = useState(location.state || null)
   const [editOpen, setEditOpen] = useState(false)
-    const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true)
 
 const fetchOrganization = async () => {
     setLoading(true)
@@ -60,7 +61,7 @@ const fetchOrganization = async () => {
 
   return (
     <Layout>
-      <div className="max-w-2xl mx-auto p-4 bg-gray-50 shadow-md rounded-2xl mt-6 space-y-4">
+      <div className="max-w-4xl mx-auto p-6 bg-gray-50 shadow-md rounded-2xl mt-6 space-y-6">
         {/* Name & Code */}
         <div className="flex flex-col md:flex-row gap-3">
           <div className="flex-1">
@@ -142,11 +143,49 @@ const fetchOrganization = async () => {
           </div>
         )}
 
-        {/* Edit Button at the bottom, centered */}
-        <div className="flex justify-center mt-2 mb-2">
-          <Button className="w-fit" onClick={() => setEditOpen(true)}>
-            Edit Organization
-          </Button>
+        {/* Action Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Role Management Card */}
+          <div className="group bg-white rounded-2xl border p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="p-3 bg-gray-100 rounded-xl group-hover:bg-gray-200 transition-colors duration-300">
+                <Users className="w-6 h-6 text-gray-600" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-800">Role Management</h3>
+                <p className="text-gray-500">Manage user roles and permissions</p>
+              </div>
+            </div>
+            <Button 
+              onClick={() => navigate(`/organizations/${id}/roles`)}
+              className="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 rounded-xl transition-all duration-300"
+            >
+              <Users className="w-5 h-5 mr-2" />
+              Manage Roles
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+          </div>
+
+          {/* Edit Organization Card */}
+          <div className="group bg-white rounded-2xl border p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="p-3 bg-gray-100 rounded-xl group-hover:bg-gray-200 transition-colors duration-300">
+                <Settings className="w-6 h-6 text-gray-600" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-800">Organization Settings</h3>
+                <p className="text-gray-500">Edit organization details and settings</p>
+              </div>
+            </div>
+            <Button 
+              onClick={() => setEditOpen(true)}
+              className="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 rounded-xl transition-all duration-300"
+            >
+              <Settings className="w-5 h-5 mr-2" />
+              Edit Organization
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+          </div>
         </div>
 
         {/* Edit Organization Modal */}
