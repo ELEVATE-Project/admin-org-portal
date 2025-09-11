@@ -157,7 +157,10 @@ return (
 
         {/* Edit Button at the bottom, centered */}
         <div className="flex justify-center mt-4">
-          <Button className="w-fit" onClick={() => setEditOpen(true)}>
+          <Button 
+            onClick={() => setEditOpen(true)}
+            className="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300"
+          >
             Edit Tenant
           </Button>
         </div>

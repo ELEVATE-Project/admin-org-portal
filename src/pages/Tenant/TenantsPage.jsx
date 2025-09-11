@@ -102,7 +102,10 @@ const handleAddTenant = (newTenantFromAPI) => {
         <div className="bg-white shadow-md rounded-lg p-6 max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold">Tenants</h2>
-            <Button onClick={() => setCreateModalOpen(true)}>
+            <Button 
+              onClick={() => setCreateModalOpen(true)}
+              className="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300"
+            >
               <Plus className="w-4 h-4 mr-2" />
               Add Tenant
             </Button>
