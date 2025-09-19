@@ -10,6 +10,7 @@ import {
   LayoutList,
   FileText,
   Bell,
+  Building2,
 } from 'lucide-react'
 import { logout } from '../api/api'
 
@@ -96,7 +97,7 @@ const Sidebar = ({ isCollapsed = false }) => {
               }
             `}
           >
-            <Users
+            <Building2
               size={16}
               className={`flex-shrink-0 ${
                 isPathActive('/tenants/organizations') ? 'text-primary-600' : 'text-gray-500'

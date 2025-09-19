@@ -34,3 +34,10 @@ export const ORGANIZATION_API = {
   update: organizationId => `/user/v1/organization/update/${organizationId}`,
   create: '/user/v1/organization/create',
 }
+
+export const ROLE_API = {
+  list: '/user/v1/user-role/list',
+  create: '/user/v1/user-role/create',
+  update: roleId => `/user/v1/user-role/update/${roleId}`,
+  delete: roleId => `/user/v1/user-role/delete/${roleId}`,
+}

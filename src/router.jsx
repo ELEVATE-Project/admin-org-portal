@@ -11,6 +11,7 @@ import TenantsPage from './pages/Tenant/TenantsPage'
 import TenantDetail from '@/pages/Tenant/TenantDetail'
 import OrganizationsListPage from '@/pages/Organization/OrganizationsListPage'
 import OrganizationDetailsPage from './pages/Organization/OrganizationDetailsPage'
+import RoleManagementPage from './pages/Role/RoleManagementPage'
 // DO NOT import OrganizationCreateModal here
 
 const AppRouter = () => {
@@ -29,6 +30,7 @@ const AppRouter = () => {
         <Route path="/tenants/:code" element={<TenantDetail />} />
         <Route path="/tenants/organizations" element={<OrganizationsListPage />} />
         <Route path="/organizations/:id" element={<OrganizationDetailsPage />} />
+        <Route path="/organizations/:organizationId/roles" element={<RoleManagementPage />} />
         {/* Add more routes as needed */}
       </Routes>
     </Router>

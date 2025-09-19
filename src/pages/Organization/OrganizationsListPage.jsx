@@ -88,7 +88,10 @@ const OrganizationsListPage = () => {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold">Organizations by Tenant</h2>
           {selectedTenant && (
-            <Button onClick={handleAddOrganization} className="flex items-center gap-2">
+            <Button 
+              onClick={handleAddOrganization} 
+              className="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 flex items-center gap-2"
+            >
               <Plus className="h-4 w-4" />
               Add New Organization
             </Button>
